@@ -1,0 +1,2 @@
+0,0,true,UP/RIGHT 0,1,true,UP/DOWN 0,2,false,DOWN/RIGHT
+1,0,true,UP/RIGHT 1,1,true,UP/DOWN 1,2,false,DOWN/RIGHT

@@ -2,15 +2,24 @@
 import socket
 
 from model.car import Car
+from model.map import Map
+
+map_filename = "resources/map.txt"
 
 #cars = [(bluetooth_mac, socket, carid, car),()]
 
 def main():
-    print("Hello")
+    print("Starting program...")
+    print()
+
+    myMap = Map(map_filename)
+    myMap.printMap()
     
-    #Connect to the first car
-    cars = init_cars()
-    cars[0].setTarget(0,0)
+    #Connect to the first car (convert this to a for loop)
+
+    #TODO: Uncomment the two below lines to enable bluetooth running
+    #cars = init_cars()
+    #cars[0].setTarget(0,0)
 
 
 #Initialize the car connections
