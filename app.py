@@ -1,9 +1,10 @@
 #App.py
 import socket
+from engine.traffic_engine import traffic_engine
 from interface.april_tags import april_tags
 
 from model.car import Car
-from model.map import Map
+from model.map.map import Map
 
 map_filename = "resources/map.txt"
 
@@ -24,8 +25,13 @@ def main():
     #Add passenger (TODO Use gui/separate thread to listen for inputs)
     myMap.add_passenger(Map.Passenger(12,13))
 
-    while True:
-        april_tag_manager.update_car_positions
+    #TODO Alexander
+    #while True:
+        #april_tag_manager.update_car_positions #get car positions from camera and update global map 
+        #traffic_engine.accept_new_passengers() #accept new passengers and add points to cars' paths 
+        #for each car in cars: 
+        #    car.update()#find the next point in the path, and set the angle of the car to point there
+
         
 
 

@@ -2,7 +2,7 @@
 
 
 from model.car import Car
-from model.map import Map
+from model.map.map import Map
 
 class traffic_engine:
     
@@ -20,11 +20,12 @@ class traffic_engine:
         shortestPath = 10000
         shortestPathCar
 
-        for car in cars:
-            for car2 in cars:
-                if car != car2:
-                    if car is in front of car2
-                        car2.stop()
+        #TODO Alexander
+        #for car in cars:
+        #    for car2 in cars:
+        #        if car != car2:
+        #            if car is in front of car2
+        #                car2.stop()
 
         #Find the car with the shortest path to the next passenger
         for (carId, car) in Map.cars.items():
