@@ -1,7 +1,25 @@
+from socket import socket
 from model.Direction import Direction
+from engine.traffic_engine import traffic_engine
+from model.car import Car
 
 #Map definition
 class Map:
+
+    passengers = []
+
+    #List of all the cars and their positions
+    cars_positions_dict = {
+        "Car1 id" : (23, 43),
+        "Car2 id" : (12, 46)
+    }
+
+    #List of the car representation and their ids
+    cars = {
+        "Car1 id" : Car("Car1 id", "car1 hardware socket"),
+        "Car2 id" : Car("Car2 id", "socket")
+    }
+
     class Cell:
         def __init__(self, x, y, isRoad, directions):
             self.x = x
@@ -17,11 +35,24 @@ class Map:
             else:
                 #Return empty list
                 pass
+        
+        def position(self):
+            return (self.x, self.y)
+
+    class Passenger:
+        def __init__(self, x, y):
+            self.x = x
+            self.y = y
+        
+        def position(self):
+            return (self.x, self.y)
+
 
     def __init__(self, filename):
         #Parse the file and generate the map
         self.filename = filename
         self.map = self.parseFile(filename)
+
 
     #Convert text file to 2D enum array: x, y, true or false, UP/RIGHT/DOWN/LEFT
     def parseFile(self, filename):
@@ -68,10 +99,24 @@ class Map:
                 print(f"Cell: ({cellX}, {cellY}) : {cellIsRoad} and {cellDirections}")
             print()
 
-    #Dijkstra: Given positions, find the shortest path on the map, or returns null if unkown
-    def shortestPath(startX, startY, endX, endY):
-        #Dijkstra(G, w, s): G->map, w->edge-weight, s->startPos
-        pass
+    def add_passenger(self, x, y):
+        """
+        Add a passenger to a specific map cell and assign the passenger to a car
+        """
+        newPassenger = self.Passenger(x,y)
+        self.passengers.append(newPassenger)
+        traffic_engine.assign_passenger(newPassenger)
+
+
+    def shortestPath(startCell, goalCell):
+        """
+        Returns a list of map cells to visit for the shortest path from the start position to the goal position
+        """
+        while False:
+            pass
+        
+        listOfCellsToVisit = []
+        return listOfCellsToVisit
 
     def initSingleSource(G, s):
         #Init-single-source(G, s): -> G, s

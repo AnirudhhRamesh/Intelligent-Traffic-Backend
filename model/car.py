@@ -1,4 +1,5 @@
 #Car Model class
+from model.map import Map
 
 #global positions dictionary
 carPositions = {
@@ -8,18 +9,21 @@ carPositions = {
 
 class Car:
     
+    passengers = [] #List of passenger cells to visit
+    cellsToVisit = [] #List of cells to visit
+
    #Init methods 
     def __init__(self, id, socket):
         self.id = id
 
         self.socket = socket
 
-    def getCurrentPosition(self):
-        return carPositions[id]
+    def position(self):
+        return Map.cars_positions_dict.get(self.id)
 
     def setTarget(self, x,y):
         self.target = (x,y)
-        self.dijkstra() #TODO: Finish dijkstra
+        () #TODO: Finish dijkstra
 
     #Drive methods
     def stopDrive():
@@ -28,13 +32,36 @@ class Car:
     def continueDrive():
         pass
 
-    #Path planning methods
-    def dijkstra(self):
-        while True:
-            x = input("command: ")
-            self.socket.send(x.encode())
+    #Updates the car
+    def update():
+        local_goal = cellsToVisit[0]
+        if(near local_goal):
+            cellsToVist.pop()
+        else:
+            adjust_angle()
+
         
-        #Will calculate a path (a list of points to go to)
+        pass
+    
+    def add_passenger_destination(self, newPassenger):
+        """
+        Adds the given passenger to the car's list of passengers.
+        Appends the shortest path from the last passenger to the newly added passenger to the car's cellsToVisit
+        """
+        self.passengers.append(newPassenger)
+        self.cellsToVisit.append(map.shortestPath(self.lastPassenger, newPassenger))
+    
+    def lastPassenger(self):
+        """
+        Returns the last passenger the car will visit
+        """
+        return self.passengers[-1]
+    
+    def cells_to_visit_count(self):
+        """
+        Returns the total cells the car has to visit
+        """
+        return len(self.passengers)
 
     
 #Car Attributes
