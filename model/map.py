@@ -70,5 +70,10 @@ class Map:
 
     #Dijkstra: Given positions, find the shortest path on the map, or returns null if unkown
     def shortestPath(startX, startY, endX, endY):
+        #Dijkstra(G, w, s): G->map, w->edge-weight, s->startPos
         pass
 
+    def initSingleSource(G, s):
+        #Init-single-source(G, s): -> G, s
+
+        pass
