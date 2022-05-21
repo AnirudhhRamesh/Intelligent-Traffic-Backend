@@ -1,5 +1,5 @@
 
-from model.map import Map
+from model.map.map import Map
 
 class april_tags:
 
@@ -8,15 +8,12 @@ class april_tags:
         "Car2 id" : "x:12, y:43"
     }
 
-    def get_car_positions(self):
+    def update_car_positions(self):
         """
         Generates the list of car positions from the camera and April tag library
         """
         #self.updated_car_positions = AprilTag.get cars
         
-
-    def update_global_cars_positions(self):
-        """
-        Updates the global dict of all the cars and their positions
-        """
-        map.car_positions_dict = self.updated_car_positions
+        Map.cars_positions_dict = self.updated_car_positions
+        
+        pass

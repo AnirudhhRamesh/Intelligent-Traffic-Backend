@@ -1,5 +1,5 @@
 #Car Model class
-from model.map import Map
+from model.map.map import Map
 
 #global positions dictionary
 carPositions = {
@@ -15,7 +15,7 @@ class Car:
    #Init methods 
     def __init__(self, id, socket):
         self.id = id
-
+        self.isMoving = True
         self.socket = socket
 
     def position(self):
@@ -26,22 +26,25 @@ class Car:
         () #TODO: Finish dijkstra
 
     #Drive methods
-    def stopDrive():
-        pass
+    def stopDrive(self):
+        self.isMoving=False
 
-    def continueDrive():
-        pass
+    def continueDrive(self):
+        self.isMoving=True
 
-    #Updates the car
-    def update():
-        local_goal = cellsToVisit[0]
-        if(near local_goal):
-            cellsToVist.pop()
-        else:
-            adjust_angle()
-
-        
-        pass
+    #Updates the car's driving angle and moves the car 
+    #TODO Alexander
+    #def update():
+    #    if self.isMoving:
+    #        socket.send('d')
+    #    else:
+    #        socket.send('s')
+    #    local_goal = cellsToVisit[0]
+    #    if(near local_goal):
+    #        cellsToVist.pop()
+    #    else:
+    #        adjust_angle()   
+    #    pass
     
     def add_passenger_destination(self, newPassenger):
         """
