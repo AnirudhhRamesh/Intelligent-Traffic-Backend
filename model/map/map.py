@@ -79,18 +79,7 @@ class Map:
         self.passengers.append(newPassenger)
         traffic_engine.assign_passenger(newPassenger)
 
-
-    def shortestPath(startCell, goalCell):
-        """
-        Returns a list of map cells to visit for the shortest path from the start position to the goal position
-        """
-        while False:
-            pass
-        
-        listOfCellsToVisit = shortest_path_recur(startCell, goalCell, [], MAXINT)
-        return listOfCellsToVisit
-
-    def shortest_path_recur(currentCell, goalCell, visited, pathLength):
+    def shortest_path_recur(self, currentCell, goalCell, visited, pathLength):
         if currentCell == goalCell:
             return (visited, pathLength)
         
@@ -100,13 +89,26 @@ class Map:
 
         for direction in directions:
             if not visited.contains(direction.cell):
-                temp = shortest_path_recur(direction.cell, goalCell, visited.add(currentCell), pathLength+1)
+                temp = shortest_path_recur(direction.cell, goalCell, visited.add(currentCell), pathLength+1)    #direction.cell should be the neighbor cell in corresponding direction
                 paths.append(temp)
                 lengths.append(temp._2)
 
         shortestLength = min(lengths)
 
-        return paths[lengths.index(shortestLength)]._1
+        return paths[lengths.index(shortestLength)]
+
+
+    def shortestPath(self, startCell, goalCell):
+        """
+        Returns a list of map cells to visit for the shortest path from the start position to the goal position
+        """
+        while False:
+            pass
+
+        listOfCellsToVisit = shortest_path_recur(startCell, goalCell, [], MAXINT)
+        return listOfCellsToVisit
+
+    
 
 
     def initSingleSource(G, s):
