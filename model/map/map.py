@@ -1,4 +1,5 @@
 from socket import socket
+from xmlrpc.client import MAXINT
 from model.Direction import Direction
 from engine.traffic_engine import traffic_engine
 from model.car import Car
@@ -86,8 +87,27 @@ class Map:
         while False:
             pass
         
-        listOfCellsToVisit = []
+        listOfCellsToVisit = shortest_path_recur(startCell, goalCell, [], MAXINT)
         return listOfCellsToVisit
+
+    def shortest_path_recur(currentCell, goalCell, visited, pathLength):
+        if currentCell == goalCell:
+            return (visited, pathLength)
+        
+        directions = currentCell.getDirections()
+        paths = []
+        lengths = []
+
+        for direction in directions:
+            if not visited.contains(direction.cell):
+                temp = shortest_path_recur(direction.cell, goalCell, visited.add(currentCell), pathLength+1)
+                paths.append(temp)
+                lengths.append(temp._2)
+
+        shortestLength = min(lengths)
+
+        return paths[lengths.index(shortestLength)]._1
+
 
     def initSingleSource(G, s):
         #Init-single-source(G, s): -> G, s
