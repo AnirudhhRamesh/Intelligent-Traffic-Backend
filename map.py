@@ -2,7 +2,6 @@ from xmlrpc.client import MAXINT
 import socket
 from typing import Any
 from direction import Direction
-import traffic_engine
 import car
 from cell import Cell
 import passenger
