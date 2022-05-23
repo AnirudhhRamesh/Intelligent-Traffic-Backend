@@ -1,10 +1,13 @@
 from xmlrpc.client import MAXINT
-import socket
+import socket as Socket
 from typing import Any
 from direction import Direction
-import car
+import car as Car
 from cell import Cell
-import passenger
+import passenger as Passenger
+import numpy as np
+
+
 
 #Map definition
 class Map:
@@ -21,64 +24,112 @@ class Map:
     def __init__(self, filename) -> None:
         #Parse the file and generate the map
         self.filename = filename
+        #self.map = self.parseFile("map.txt")
         self.map = self.parseFile(filename)
-        self.cars = {
-        "Car1 id" : car.Car("Car1 id", "car1 hardware socket", self.map),
-        "Car2 id" : car.Car("Car2 id", "socket", self.map)
-    }
+        
+        #################
+        self.printMap()
+        #################
+        
+        
+        # self.cars = {
+        #     "Car1 id" : Car("Car1 id", "car1 hardware socket", self.map),
+        #     "Car2 id" : Car("Car2 id", "socket", self.map)
+        # }
+        
+    
 
 
-    #Convert text file to 2D enum array: x, y, true or false, UP/RIGHT/DOWN/LEFT
+    def getDirection(self, direction):
+        if direction.lower() == "up": 
+            return Direction.UP
+        elif direction.lower() == "right": 
+            return Direction.RIGHT
+        elif direction.lower() == "down": 
+            return Direction.DOWN
+        else: #direction.lower() == "left": 
+            return Direction.LEFT
+
     def parseFile(self, filename):
 
         #2D array of all the cells
         newMap = []
 
-        with open(filename, 'r') as f:
+        with open(filename, 'r', encoding='utf-8-sig') as f:
             lines = f.readlines()
 
             x = 0
             y = 0
-
-            #Iterate through each line of map
+            
+            max_y = len(lines)
+            max_x = len(lines[0].split(','))
+            
+            lines.reverse()
+            newMap = [[None for y in range(max_y)] for x in range(max_x)] 
             for line in lines:
-              #  splitLines = line.split(' ')
                 cells = line.split(',')
-                newMapRow = []
-               # for row in splitLines:
+                
+                
                 for cell in cells:
-                #    (x, y, isRoad, Directions) = row.split(',')
-                    # directionsList = Directions.split('/')
+                    cell = cell.strip()
+                    # newCell = None
+                                        
                     if cell.lower() == "x":
-                        newCell = self.Cell(int(x), int(y), False, parsedDirectionsList)
+                        newMap[x][y] = Cell(int(x), int(y), False, [])
+                        # newCell = "X"
                     else:
                         parsedDirectionsList = []
-                        for direction in cell.split('/'):
-                            if direction.lower() == "up": parsedDirectionsList.append(Direction.UP)
-                            if direction.lower() == "right": parsedDirectionsList.append(Direction.RIGHT)
-                            if direction.lower() == "down": parsedDirectionsList.append(Direction.DOWN)
-                            if direction.lower() == "left": parsedDirectionsList.append(Direction.LEFT)
+                        directions = cell.split('/')
+                        for direction in directions:
+                            parsedDirectionsList.append(self.getDirection(direction))
                             
-                            newCell = Cell(int(x), int(y), True, parsedDirectionsList)
-                            
-                    newMapRow.append(newCell)
+                        newMap[x][y] = Cell(int(x), int(y), True, parsedDirectionsList)
                     x += 1
-                newMap.append(newMapRow)
+                # newMap.append(newMapRow)
                 y += 1
-
+                x = 0
             f.close()
-        
-        return newMap
 
+            m = np.array(newMap)
+        return m
+
+
+    # #Convert text file to 2D enum array: x, y, true or false, UP/RIGHT/DOWN/LEFT
+    # def parseFile(self, filename):
     def printMap(self):
-        for x in range(len(self.map)):
-            for y in self.map[x]:
-                cellX = y.x
-                cellY = y.y
-                cellIsRoad = y.isRoad
-                cellDirections = y.directions
-                print(f"Cell: ({cellX}, {cellY}) : {cellIsRoad} and {cellDirections}")
-            print()
+        array = []
+        
+        max_y = len(self.map[0])
+        max_x = len(self.map)
+        for y in range(max_y):
+            d = []
+            for x in range(max_x):
+                cell = self.map[x][y]
+                dirString = ""
+                directions = cell.directions
+                length = len(directions)
+                if length == 0:
+                    dirString = " XX "
+                else:                       
+                    for dir in directions:
+                        dirString += Direction.toString(dir)
+                    match length:
+                        case 1:
+                            dirString = " " + dirString + "  "
+                        case 2:
+                            dirString = " " + dirString + " "
+                        case 3:
+                            dirString += " "
+                d.append(dirString)
+            array.append(d)
+            
+        numpyMap = np.array(array)
+        
+        print(np.array2string(numpyMap, separator=' | '))
+                
+                
+            
+            
 
     def add_passenger(self, passenger):
         """
