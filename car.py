@@ -1,7 +1,8 @@
 #Car Model class
-from model.map.map import Map
 
 #global positions dictionary
+import map
+
 carPositions = {
     "car_1" : (3,5),
     "car_2" : (14, 32)
@@ -13,15 +14,16 @@ class Car:
     cellsToVisit = [] #List of cells to visit
 
    #Init methods 
-    def __init__(self, id, socket):
+    def __init__(self, id, socket, map):
         self.id = id
         self.isMoving = True
         self.socket = socket
+        self.map = map
 
     def position(self):
-        return Map.cars_positions_dict.get(self.id)
+        return self.map.cars_positions_dict.get(self.id)
 
-    def setTarget(self, x,y):
+    def setTarget(self, x:int, y:int):
         self.target = (x,y)
         () #TODO: Finish dijkstra
 
@@ -52,7 +54,7 @@ class Car:
         Appends the shortest path from the last passenger to the newly added passenger to the car's cellsToVisit
         """
         self.passengers.append(newPassenger)
-        self.cellsToVisit.append(map.shortestPath(self.lastPassenger, newPassenger))
+        self.cellsToVisit.append(map.Map.shortestPath(self.map, self.lastPassenger, newPassenger))
     
     def lastPassenger(self):
         """

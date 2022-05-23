@@ -1,7 +1,9 @@
-from socket import socket
-from model.Direction import Direction
-from engine.traffic_engine import traffic_engine
-from model.car import Car
+import socket
+from direction import Direction
+import traffic_engine
+import car
+from cell import Cell
+import passenger
 
 #Map definition
 class Map:
@@ -14,19 +16,56 @@ class Map:
         "Car2 id" : (12, 46)
     }
 
-    #List of the car representation and their ids
-    cars = {
-        "Car1 id" : Car("Car1 id", "car1 hardware socket"),
-        "Car2 id" : Car("Car2 id", "socket")
-    }
 
-    def __init__(self, filename):
+    def __init__(self, filename) -> None:
         #Parse the file and generate the map
         self.filename = filename
         self.map = self.parseFile(filename)
+        self.cars = {
+        "Car1 id" : car.Car("Car1 id", "car1 hardware socket", self.map),
+        "Car2 id" : car.Car("Car2 id", "socket", self.map)
+    }
+
+    def add_passenger(self, passenger:passenger.Passenger) -> None:
+        """
+        Add a passenger to a specific map cell and assign the passenger to a car
+        """
+        self.passengers.append(passenger)
+
+
+    def shortestPath(map, startCell, goalCell):
+        """
+        Returns a list of map cells to visit for the shortest path from the start position to the goal position
+        
+        Parameters
+        ----------
+        startCell: Cell
+            The start cell of the path
+        goalCell: Cell
+            The end cell of the path
+        """
+        while False:
+            pass
+        
+        listOfCellsToVisit = []
+        return listOfCellsToVisit
+
+    def initSingleSource(G, s):
+        #Init-single-source(G, s): -> G, s
+
+        pass
+
+    def getCell(self, x:int, y:int):
+        """
+        Returns the cell of the corresponding x and y values
+        """
+        return self.map[x][y] #TODO: Make sure map representation is correct, maybe translation method required?
+
+
+    ## Helper methods ##
 
     #Convert text file to 2D enum array: x, y, true or false, UP/RIGHT/DOWN/LEFT
-    def parseFile(self, filename):
+    def parseFile(self, filename:str):
 
         #2D array of all the cells
         newMap = []
@@ -52,7 +91,7 @@ class Map:
                         if direction.lower() == "down": parsedDirectionsList.append(Direction.DOWN)
                         if direction.lower() == "left": parsedDirectionsList.append(Direction.LEFT)
 
-                    newCell = self.Cell(int(x), int(y), isRoad.lower() == "true", parsedDirectionsList)
+                    newCell = Cell(int(x), int(y), isRoad.lower() == "true", parsedDirectionsList)
                     newMapRow.append(newCell)
                 newMap.append(newMapRow)
 
@@ -69,27 +108,3 @@ class Map:
                 cellDirections = y.directions
                 print(f"Cell: ({cellX}, {cellY}) : {cellIsRoad} and {cellDirections}")
             print()
-
-    def add_passenger(self, x, y):
-        """
-        Add a passenger to a specific map cell and assign the passenger to a car
-        """
-        newPassenger = self.Passenger(x,y)
-        self.passengers.append(newPassenger)
-        traffic_engine.assign_passenger(newPassenger)
-
-
-    def shortestPath(startCell, goalCell):
-        """
-        Returns a list of map cells to visit for the shortest path from the start position to the goal position
-        """
-        while False:
-            pass
-        
-        listOfCellsToVisit = []
-        return listOfCellsToVisit
-
-    def initSingleSource(G, s):
-        #Init-single-source(G, s): -> G, s
-
-        pass

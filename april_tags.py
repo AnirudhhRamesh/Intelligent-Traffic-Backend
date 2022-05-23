@@ -1,6 +1,5 @@
 
-from model.map.map import Map
-
+import map
 class april_tags:
 
     updated_car_positions = {
@@ -14,6 +13,6 @@ class april_tags:
         """
         #self.updated_car_positions = AprilTag.get cars
         
-        Map.cars_positions_dict = self.updated_car_positions
+        map.Map.cars_positions_dict = self.updated_car_positions
         
         pass

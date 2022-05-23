@@ -1,12 +1,13 @@
 #App.py
-import socket
-from engine.traffic_engine import traffic_engine
-from interface.april_tags import april_tags
+import traffic_engine
+import april_tags
 
-from model.car import Car
-from model.map.map import Map
+import map
+import cell
+import passenger
 
-map_filename = "resources/map.txt"
+import car
+map_filename = "map.txt"
 
 #cars = [(bluetooth_mac, socket, carid, car),()]
 
@@ -15,15 +16,19 @@ def main():
     print()
 
     #Parse the map
-    myMap = Map(map_filename)
+    myMap = map.Map(map_filename)
     myMap.printMap()
     
+    myTrafficEngine = traffic_engine.Traffic_Engine(myMap)
+
     #Connect to the cars
-    init_cars()
-    april_tag_manager = april_tags()
+    #init_cars()
+    #april_tag_manager = april_tags()
 
     #Add passenger (TODO Use gui/separate thread to listen for inputs)
-    myMap.add_passenger(Map.Passenger(12,13))
+    newPassenger = passenger.Passenger(myMap.getCell(0,0), myMap.getCell(0, 0))
+    myMap.add_passenger(newPassenger)
+    myTrafficEngine.assign_passenger(newPassenger)
 
     #TODO Alexander
     #while True:

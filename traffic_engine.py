@@ -1,24 +1,25 @@
 #Traffic engine definition: Decides and performs intelligent traffic
+from typing import Any
+import car
+import map
 
-
-from model.car import Car
-from model.map.map import Map
-
-class traffic_engine:
+class Traffic_Engine:
     
-    def assign_passenger(self, passenger):
+    def __init__(self, map):
+        self.map = map
+    
+    def assign_passenger(self, passenger) -> None:
         """
         Add a new passenger to the map and assign it to a car
         """
-        self.intelligent_decision_maker(passenger)
+        self.traffic_controller(passenger)
 
-    def intelligent_decision_maker(self, passenger):
+    def traffic_controller(self, passenger) -> None:
         """
         Assigns a newly generated passenger to the car whose last destination is closest to the passenger cell
         """
-
         shortestPath = 10000
-        shortestPathCar
+        shortestPathCar = Any
 
         #TODO Alexander
         #for car in cars:
@@ -28,8 +29,9 @@ class traffic_engine:
         #                car2.stop()
 
         #Find the car with the shortest path to the next passenger
-        for (carId, car) in Map.cars.items():
-            newPath = len(Map.shortestPath(car.lastPassenger.position, passenger.position))
+        for (carId, car) in self.map.cars.items():
+            print(f"Map type: {type(self.map)}")
+            newPath = len(map.Map.shortestPath(self.map, car.lastPassenger, passenger))
             if shortestPath > newPath:
                 shortestPath = newPath
                 shortestPathCar = car
