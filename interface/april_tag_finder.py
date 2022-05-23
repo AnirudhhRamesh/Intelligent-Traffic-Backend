@@ -13,7 +13,7 @@ from queue import Queue
 import cv2
 import numpy as np
 from imutils.video import videostream
-from model.map.map import Map
+#from model.map.map import Map
 
 from translator import Translator
 
@@ -71,7 +71,7 @@ print("starting stream!")
 corner_ids = [4,9,0,6]
 tr = Translator(corner_ids[0], corner_ids[1], corner_ids[2],corner_ids[3], 16,9,at_detector)
 
-map2d = Map.parseFile("map.txt")
+#map2d = Map.parseFile("map.txt")
 
 while True:
     ret, frame_in = cap.read()
@@ -103,8 +103,8 @@ while True:
         print("hello")
         cv2.circle(frame_in, (int(tr.inverse(8,4)[0]),int(tr.inverse(8,4)[1])),30,(0,255,0),1)
         
-        sideLength_x = tr.id2Coords[0] - tr.id1Coords[0]
-        sideLength_y = tr.id4Coords[1] - tr.id1Coords[1]
+        sideLength_x = abs(tr.id2Coords[0] - tr.id1Coords[0])
+        sideLength_y = abs(tr.id4Coords[1] - tr.id1Coords[1])
         max_xi = 17
         max_yi = 10
         squareSide_x = sideLength_x/max_xi
@@ -112,8 +112,15 @@ while True:
         for i in range(max_xi):
             for j in range(max_yi):
                 cv2.putText(frame_in, str((i,j)), (int(tr.inverse(i,j)[0]),int(tr.inverse(i,j)[1])), cv2.FONT_HERSHEY_SIMPLEX, .25 , (255,0,0), 1,cv2.LINE_AA)
-                cv2.rectangle(frame_in, (int(tr.inverse(i,j)[0] ),int(tr.inverse(i,j)[1]) - 5 -int(squareSide_y/2)), (int(tr.inverse(i,j)[0]) + int(squareSide_x),int(tr.inverse(i,j)[1]) + 5 + int(squareSide_y/2)), (0,0,0), 2)
+                if i % 2 == 0 and j% 8 != 0:
+                    print("road")
+                    # cv2.rectangle(frame_in, (int(tr.inverse(i,j)[0] ),int(tr.inverse(i,j)[1]) - int(squareSide_y/2)), (int(tr.inverse(i,j)[0]) + int(squareSide_x),int(tr.inverse(i,j)[1]) + int(squareSide_y/2)), (0,0,0), 1)
+                else:
+                    cv2.rectangle(frame_in, (int(tr.inverse(i,j)[0] ),int(tr.inverse(i,j)[1]) - int(squareSide_y/2)), (int(tr.inverse(i,j)[0]) + int(squareSide_x),int(tr.inverse(i,j)[1]) + int(squareSide_y/2)), (0,0,0), -1)
+                    cv2.rectangle(frame_in, (int(tr.inverse(i,j)[0] ),int(tr.inverse(i,j)[1]) - int(squareSide_y/2)), (int(tr.inverse(i,j)[0]) + int(squareSide_x),int(tr.inverse(i,j)[1]) + int(squareSide_y/2)), (0,0,0), 1)
 
+        cv2.rectangle(frame_in, (int(tr.inverse(0, 0)[0] ),int(tr.inverse(0,0)[1]) + int(squareSide_y/2)), (int(tr.inverse(max_xi, max_yi)[0]),int(tr.inverse(max_xi, max_yi)[1]) + int(squareSide_y/2)), (0,0,0), 1)
+                    
 
 
 

@@ -6,6 +6,7 @@ from model.car import Car
 
 #Map definition
 class Map:
+    print("hello")
 
     passengers = []
 
@@ -40,22 +41,29 @@ class Map:
 
             #Iterate through each line of map
             for line in lines:
-                splitLines = line.split(' ')
+              #  splitLines = line.split(' ')
+                cells = line.split(',')
                 newMapRow = []
-                for row in splitLines:
-                    (x, y, isRoad, Directions) = row.split(',')
-                    directionsList = Directions.split('/')
-
-                    parsedDirectionsList = []
-                    for direction in directionsList:
-                        if direction.lower() == "up": parsedDirectionsList.append(Direction.UP)
-                        if direction.lower() == "right": parsedDirectionsList.append(Direction.RIGHT)
-                        if direction.lower() == "down": parsedDirectionsList.append(Direction.DOWN)
-                        if direction.lower() == "left": parsedDirectionsList.append(Direction.LEFT)
-
-                    newCell = self.Cell(int(x), int(y), isRoad.lower() == "true", parsedDirectionsList)
+               # for row in splitLines:
+                for cell in cells:
+                #    (x, y, isRoad, Directions) = row.split(',')
+                    # directionsList = Directions.split('/')
+                    if cell.lower() == "x":
+                        newCell = self.Cell(int(x), int(y), False, parsedDirectionsList)
+                    else:
+                        parsedDirectionsList = []
+                        for direction in cell.split('/'):
+                            if direction.lower() == "up": parsedDirectionsList.append(Direction.UP)
+                            if direction.lower() == "right": parsedDirectionsList.append(Direction.RIGHT)
+                            if direction.lower() == "down": parsedDirectionsList.append(Direction.DOWN)
+                            if direction.lower() == "left": parsedDirectionsList.append(Direction.LEFT)
+                            
+                            newCell = self.Cell(int(x), int(y), True, parsedDirectionsList)
+                            
                     newMapRow.append(newCell)
+                    x += 1
                 newMap.append(newMapRow)
+                y += 1
 
             f.close()
         
