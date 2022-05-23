@@ -54,7 +54,8 @@ class Car:
         Appends the shortest path from the last passenger to the newly added passenger to the car's cellsToVisit
         """
         self.passengers.append(newPassenger)
-        self.cellsToVisit.append(map.Map.shortestPath(self.map, self.lastPassenger, newPassenger))
+        self.cellsToVisit.append(map.Map.shortestPath(self.map, self.lastPassenger.start, newPassenger.goal))
+        self.cellsToVisit.append(map.Map.shortest_path_recur(self.map, newPassenger.start, newPassenger.goal))
     
     def lastPassenger(self):
         """
