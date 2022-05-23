@@ -141,7 +141,7 @@ class Map:
         #Find the car with the shortest path to the next passenger
         for (carId, car) in self.cars.items():
             print(f"Map type: {type(self.map)}")
-            newPath = len(self.shortestPath(car.lastPassenger, passenger))
+            newPath = len(self.shortestPath(car.lastPassenger.goal, passenger.start))
             if shortestPath > newPath:
                 shortestPath = newPath
                 shortestPathCar = car
