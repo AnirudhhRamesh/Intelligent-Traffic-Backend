@@ -1,5 +1,4 @@
 #App.py
-import traffic_engine
 import april_tags
 
 import map
@@ -18,8 +17,6 @@ def main():
     #Parse the map
     myMap = map.Map(map_filename)
     myMap.printMap()
-    
-    myTrafficEngine = traffic_engine.Traffic_Engine(myMap)
 
     #Connect to the cars
     #init_cars()
@@ -28,7 +25,6 @@ def main():
     #Add passenger (TODO Use gui/separate thread to listen for inputs)
     newPassenger = passenger.Passenger(myMap.getCell(0,0), myMap.getCell(0, 0))
     myMap.add_passenger(newPassenger)
-    myTrafficEngine.assign_passenger(newPassenger)
 
     #TODO Alexander
     #while True:

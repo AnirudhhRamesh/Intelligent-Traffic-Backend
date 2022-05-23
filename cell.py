@@ -8,12 +8,7 @@ class Cell:
         self.directions = directions
 
     def getDirections(self):
-        if (self.isRoad):
-            #Return the cell directions
-            pass
-        else:
-            #Return empty list
-            pass
+        self.directions
     
     def position(self):
         return (self.x, self.y)

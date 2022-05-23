@@ -1,4 +1,6 @@
+from xmlrpc.client import MAXINT
 import socket
+from typing import Any
 from direction import Direction
 import traffic_engine
 import car
@@ -26,46 +28,9 @@ class Map:
         "Car2 id" : car.Car("Car2 id", "socket", self.map)
     }
 
-    def add_passenger(self, passenger:passenger.Passenger) -> None:
-        """
-        Add a passenger to a specific map cell and assign the passenger to a car
-        """
-        self.passengers.append(passenger)
-
-
-    def shortestPath(map, startCell, goalCell):
-        """
-        Returns a list of map cells to visit for the shortest path from the start position to the goal position
-        
-        Parameters
-        ----------
-        startCell: Cell
-            The start cell of the path
-        goalCell: Cell
-            The end cell of the path
-        """
-        while False:
-            pass
-        
-        listOfCellsToVisit = []
-        return listOfCellsToVisit
-
-    def initSingleSource(G, s):
-        #Init-single-source(G, s): -> G, s
-
-        pass
-
-    def getCell(self, x:int, y:int):
-        """
-        Returns the cell of the corresponding x and y values
-        """
-        return self.map[x][y] #TODO: Make sure map representation is correct, maybe translation method required?
-
-
-    ## Helper methods ##
 
     #Convert text file to 2D enum array: x, y, true or false, UP/RIGHT/DOWN/LEFT
-    def parseFile(self, filename:str):
+    def parseFile(self, filename):
 
         #2D array of all the cells
         newMap = []
@@ -78,22 +43,29 @@ class Map:
 
             #Iterate through each line of map
             for line in lines:
-                splitLines = line.split(' ')
+              #  splitLines = line.split(' ')
+                cells = line.split(',')
                 newMapRow = []
-                for row in splitLines:
-                    (x, y, isRoad, Directions) = row.split(',')
-                    directionsList = Directions.split('/')
-
-                    parsedDirectionsList = []
-                    for direction in directionsList:
-                        if direction.lower() == "up": parsedDirectionsList.append(Direction.UP)
-                        if direction.lower() == "right": parsedDirectionsList.append(Direction.RIGHT)
-                        if direction.lower() == "down": parsedDirectionsList.append(Direction.DOWN)
-                        if direction.lower() == "left": parsedDirectionsList.append(Direction.LEFT)
-
-                    newCell = Cell(int(x), int(y), isRoad.lower() == "true", parsedDirectionsList)
+               # for row in splitLines:
+                for cell in cells:
+                #    (x, y, isRoad, Directions) = row.split(',')
+                    # directionsList = Directions.split('/')
+                    if cell.lower() == "x":
+                        newCell = self.Cell(int(x), int(y), False, parsedDirectionsList)
+                    else:
+                        parsedDirectionsList = []
+                        for direction in cell.split('/'):
+                            if direction.lower() == "up": parsedDirectionsList.append(Direction.UP)
+                            if direction.lower() == "right": parsedDirectionsList.append(Direction.RIGHT)
+                            if direction.lower() == "down": parsedDirectionsList.append(Direction.DOWN)
+                            if direction.lower() == "left": parsedDirectionsList.append(Direction.LEFT)
+                            
+                            newCell = Cell(int(x), int(y), True, parsedDirectionsList)
+                            
                     newMapRow.append(newCell)
+                    x += 1
                 newMap.append(newMapRow)
+                y += 1
 
             f.close()
         
@@ -108,3 +80,76 @@ class Map:
                 cellDirections = y.directions
                 print(f"Cell: ({cellX}, {cellY}) : {cellIsRoad} and {cellDirections}")
             print()
+
+    def add_passenger(self, passenger):
+        """
+        Add a passenger to a specific map cell and assign the passenger to a car
+        """
+        self.passengers.append(passenger)
+        self.assign_passenger(passenger)
+
+    #TODO Damian
+    def shortest_path_recur(self, currentCell, goalCell, visited, pathLength):
+        """
+        if currentCell == goalCell:
+            return (visited, pathLength)
+        
+        directions = currentCell.getDirections()
+        paths = []
+        lengths = []
+
+        for direction in directions:
+            if not visited.contains(direction.cell):
+                temp = self.shortest_path_recur(direction.cell, goalCell, visited.add(currentCell), pathLength+1)    #direction.cell should be the neighbor cell in corresponding direction
+                paths.append(temp)
+                lengths.append(temp._2)
+
+        shortestLength = min(lengths)
+
+        return paths[lengths.index(shortestLength)]
+        """
+        pass
+
+    # TODO Damian
+    def shortestPath(self, startCell, goalCell):
+        """
+        Returns a list of map cells to visit for the shortest path from the start position to the goal position
+        """
+        while False:
+            pass
+
+        listOfCellsToVisit = []#self.shortest_path_recur(startCell, goalCell, [], MAXINT)
+        return listOfCellsToVisit
+
+    def getCell(self, x, y):
+        return self.map[x][y]
+
+
+    def assign_passenger(self, passenger) -> None:
+        """
+        Assigns a newly generated passenger to the car whose last destination is closest to the passenger cell
+        """
+        shortestPath = 10000
+        shortestPathCar = Any
+
+        #TODO Alexander
+        #for car in cars:
+        #    for car2 in cars:
+        #        if car != car2:
+        #            if car is in front of car2
+        #                car2.stop()
+
+        #Find the car with the shortest path to the next passenger
+        for (carId, car) in self.cars.items():
+            print(f"Map type: {type(self.map)}")
+            newPath = len(self.shortestPath(car.lastPassenger, passenger))
+            if shortestPath > newPath:
+                shortestPath = newPath
+                shortestPathCar = car
+
+        shortestPathCar.add_passenger_destination(passenger)
+    
+    def initSingleSource(G, s):
+        #Init-single-source(G, s): -> G, s
+
+        pass
