@@ -1,2 +1,16 @@
-0,0,true,UP/RIGHT 0,1,true,UP/DOWN 0,2,false,DOWN/RIGHT
-1,0,true,UP/RIGHT 1,1,true,UP/DOWN 1,2,false,DOWN/RIGHT
+0,0,true,UP/RIGHT 0,1,false,DOWN 0,2,true,UP/RIGHT 0,3,false,DOWN 0,4,true,UP/RIGHT 0,5,false,DOWN 0,6,true,UP/RIGHT 0,7,false,DOWN 0,8,true,UP/RIGHT 
+1,0,true,DOWN 1,1,false,DOWN 1,2,true,DOWN 1,3,false,DOWN 1,4,true,DOWN 1,5,false,DOWN 1,6,true,DOWN 1,7,false,DOWN 1,8,true,DOWN 
+2,0,true,UP/RIGHT 2,1,false,DOWN 2,2,true,UP/RIGHT 2,3,false,DOWN 2,4,true,UP/RIGHT 2,5,false,DOWN 2,6,true,UP/RIGHT 2,7,false,DOWN 2,8,true,UP/RIGHT 
+3,0,true,DOWN 3,1,false,DOWN 3,2,true,DOWN 3,3,false,DOWN 3,4,true,DOWN 3,5,false,DOWN 3,6,true,DOWN 3,7,false,DOWN 3,8,true,DOWN 
+4,0,true,UP/RIGHT 4,1,false,DOWN 4,2,true,UP/RIGHT 4,3,false,DOWN 4,4,true,UP/RIGHT 4,5,false,DOWN 4,6,true,UP/RIGHT 4,7,false,DOWN 4,8,true,UP/RIGHT 
+5,0,true,DOWN 5,1,false,DOWN 5,2,true,DOWN 5,3,false,DOWN 5,4,true,DOWN 5,5,false,DOWN 5,6,true,DOWN 5,7,false,DOWN 5,8,true,DOWN 
+6,0,true,UP/RIGHT 6,1,false,DOWN 6,2,true,UP/RIGHT 6,3,false,DOWN 6,4,true,UP/RIGHT 6,5,false,DOWN 6,6,true,UP/RIGHT 6,7,false,DOWN 6,8,true,UP/RIGHT 
+7,0,true,DOWN 7,1,false,DOWN 7,2,true,DOWN 7,3,false,DOWN 7,4,true,DOWN 7,5,false,DOWN 7,6,true,DOWN 7,7,false,DOWN 7,8,true,DOWN 
+8,0,true,UP/RIGHT 8,1,false,DOWN 8,2,true,UP/RIGHT 8,3,false,DOWN 8,4,true,UP/RIGHT 8,5,false,DOWN 8,6,true,UP/RIGHT 8,7,false,DOWN 8,8,true,UP/RIGHT 
+9,0,true,DOWN 9,1,false,DOWN 9,2,true,DOWN 9,3,false,DOWN 9,4,true,DOWN 9,5,false,DOWN 9,6,true,DOWN 9,7,false,DOWN 9,8,true,DOWN 
+10,0,true,UP/RIGHT 10,1,false,DOWN 10,2,true,UP/RIGHT 10,3,false,DOWN 10,4,true,UP/RIGHT 10,5,false,DOWN 10,6,true,UP/RIGHT 10,7,false,DOWN 10,8,true,UP/RIGHT 
+11,0,true,DOWN 11,1,false,DOWN 11,2,true,DOWN 11,3,false,DOWN 11,4,true,DOWN 11,5,false,DOWN 11,6,true,DOWN 11,7,false,DOWN 11,8,true,DOWN 
+12,0,true,UP/RIGHT 12,1,false,DOWN 12,2,true,UP/RIGHT 12,3,false,DOWN 12,4,true,UP/RIGHT 12,5,false,DOWN 12,6,true,UP/RIGHT 12,7,false,DOWN 12,8,true,UP/RIGHT 
+13,0,true,DOWN 13,1,false,DOWN 13,2,true,DOWN 13,3,false,DOWN 13,4,true,DOWN 13,5,false,DOWN 13,6,true,DOWN 13,7,false,DOWN 13,8,true,DOWN 
+14,0,true,UP/RIGHT 14,1,false,DOWN 14,2,true,UP/RIGHT 14,3,false,DOWN 14,4,true,UP/RIGHT 14,5,false,DOWN 14,6,true,UP/RIGHT 14,7,false,DOWN 14,8,true,UP/RIGHT 
+15,0,true,DOWN 15,1,false,DOWN 15,2,true,DOWN 15,3,false,DOWN 15,4,true,DOWN 15,5,false,DOWN 15,6,true,DOWN 15,7,false,DOWN 15,8,true,DOWN 
