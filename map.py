@@ -1,3 +1,4 @@
+from queue import Queue
 from xmlrpc.client import MAXINT
 import socket as Socket
 from typing import Any
@@ -26,6 +27,8 @@ class Map:
         self.filename = filename
         #self.map = self.parseFile("map.txt")
         self.map = self.parseFile(filename)
+        self.max_x = len(self.map)
+        self.max_y = len(self.map[0])
         
         #################
         self.printMap()
@@ -98,12 +101,10 @@ class Map:
     # def parseFile(self, filename):
     def printMap(self):
         array = []
-        
-        max_y = len(self.map[0])
-        max_x = len(self.map)
-        for y in range(max_y):
+
+        for y in range(self.max_y):
             d = []
-            for x in range(max_x):
+            for x in range(self.max_x):
                 cell = self.map[x][y]
                 dirString = ""
                 directions = cell.directions
@@ -138,38 +139,73 @@ class Map:
         self.passengers.append(passenger)
         self.assign_passenger(passenger)
 
-    #TODO Damian
-    def shortest_path_recur(self, currentCell, goalCell, visited, pathLength):
-        """
-        if currentCell == goalCell:
-            return (visited, pathLength)
-        
-        directions = currentCell.getDirections()
-        paths = []
-        lengths = []
-
-        for direction in directions:
-            if not visited.contains(direction.cell):
-                temp = self.shortest_path_recur(direction.cell, goalCell, visited.add(currentCell), pathLength+1)    #direction.cell should be the neighbor cell in corresponding direction
-                paths.append(temp)
-                lengths.append(temp._2)
-
-        shortestLength = min(lengths)
-
-        return paths[lengths.index(shortestLength)]
-        """
-        pass
-
     # TODO Damian
     def shortestPath(self, startCell, goalCell):
         """
         Returns a list of map cells to visit for the shortest path from the start position to the goal position
         """
-        while False:
-            pass
+        queue = Queue(self.max_x*self.max_y)
+        queue.put(startCell)
+        predecessors =[[None for y in range(self.max_y)] for x in range(self.max_x)] 
 
-        listOfCellsToVisit = []#self.shortest_path_recur(startCell, goalCell, [], MAXINT)
-        return listOfCellsToVisit
+        while not queue.empty():
+            cell = queue.get()
+
+            for direction in cell.directions:
+                newCell = None
+                match direction:
+                    case Direction.UP:
+                        if predecessors[cell.x][min(cell.y + 1, self.max_y - 1)] is None:
+                            newCell = self.map[cell.x][cell.y + 1]
+                            predecessors[newCell.x][newCell.y] = cell
+                            queue.put(newCell)
+                            if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
+                                break
+
+                    case Direction.DOWN:
+                        if predecessors[cell.x][max(0, cell.y - 1)] is None:
+                            newCell = self.map[cell.x][cell.y - 1]
+                            predecessors[newCell.x][newCell.y] = cell
+                            queue.put(newCell)
+                            if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
+                                break
+                    
+                    case Direction.RIGHT:
+                        if predecessors[min(cell.x + 1, self.max_x - 1)][cell.y] is None:
+                            newCell = self.map[cell.x + 1][cell.y]
+                            predecessors[newCell.x][newCell.y] = cell
+                            queue.put(newCell)
+                            if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
+                                break
+
+                    case Direction.LEFT:
+                        if predecessors[max(0, cell.x - 1)][cell.y] is None:
+                            newCell = self.map[cell.x - 1][cell.y]
+                            predecessors[newCell.x][newCell.y] = cell
+                            queue.put(newCell)
+                            if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
+                                break
+        if(predecessors[goalCell.x][goalCell.y] is None):
+            print("no path found........")
+        
+        print("goal pred", predecessors[goalCell.x][goalCell.y])
+        current = goalCell
+        cellsToVisit = []
+        print(predecessors)
+        while current != startCell:
+            cellsToVisit.append(current)
+            current = predecessors[current.x][current.y]
+
+        print("")
+        print("-------------------------------------")
+        print(cellsToVisit)
+        cellsToVisit.reverse()
+        path = np.array(cellsToVisit)
+        for cell in path:
+            print("(", cell.x, cell.y, ")")
+        # print(path)
+        print("")
+        return path
 
     def getCell(self, x, y):
         return self.map[x][y]
@@ -203,3 +239,6 @@ class Map:
         #Init-single-source(G, s): -> G, s
 
         pass
+
+testMap = Map("map.csv")
+testMap.shortestPath(testMap.map[10][4], testMap.map[12][0])
