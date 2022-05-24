@@ -243,3 +243,4 @@ class Map:
 
 #testMap = Map("map2.csv")
 #testMap.shortestPath(testMap.map[10][4], testMap.map[12][0])
+
