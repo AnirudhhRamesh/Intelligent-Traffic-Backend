@@ -1,10 +1,11 @@
+from random import randint
 from turtle import Screen, color, width
 import pygame
 from pygame.locals import *
 import sys
+from cell import Cell
 
-map_filename = "map.csv"
-
+from passenger import Passenger
  
  
 # pygame.draw.polygon(surface, color, pointlist, width)
@@ -18,7 +19,7 @@ map_filename = "map.csv"
 #GUI description
 class GUI:
     def __init__(self, map) -> None:
-        self.map = map.map
+        self.map = map
 
     def launchGUI(self):
         pygame.init()
@@ -52,15 +53,13 @@ class GUI:
 
         #create array to select map cell
         grid = []
-        for row in range(len(self.map)):
+        for row in range(len(self.map.map)):
             grid.append([])
-            for column in range(len(self.map[0])):
+            for column in range(len(self.map.map[0])):
                 grid[row].append(0)
 
         #Game loop begins
-        while True:
-            # Code
-        
+        while True:        
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -70,14 +69,16 @@ class GUI:
                     pos = pygame.mouse.get_pos()
                     column = pos[0] // (cell_width+margin)
                     row = pos[1] // (cell_height+margin)
-
-                    grid[column][row] = 1
+                    if self.map.map[column][row].isRoad: 
+                        grid[column][row] = 1
+                        self.map.add_passenger(Passenger(self.map.getCell(column, row), self.map.getCell(randint(0, 16), randint(0,8))))
+                        
 
             #Draw the grid
             for row in range(len(grid[0])):
                 for column in range(len(grid)):
                     color = BLACK
-                    if self.map[column][row].isRoad:
+                    if self.map.map[column][row].isRoad:
                         color = WHITE
                     # else:
                     #     color = BLACK
