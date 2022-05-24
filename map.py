@@ -138,37 +138,36 @@ class Map:
         self.passengers.append(passenger)
         self.assign_passenger(passenger)
 
-    #TODO Damian
-    def shortest_path_recur(self, currentCell, goalCell, visited, pathLength):
-        """
-        if currentCell == goalCell:
-            return (visited, pathLength)
-        
-        directions = currentCell.getDirections()
-        paths = []
-        lengths = []
-
-        for direction in directions:
-            if not visited.contains(direction.cell):
-                temp = self.shortest_path_recur(direction.cell, goalCell, visited.add(currentCell), pathLength+1)    #direction.cell should be the neighbor cell in corresponding direction
-                paths.append(temp)
-                lengths.append(temp._2)
-
-        shortestLength = min(lengths)
-
-        return paths[lengths.index(shortestLength)]
-        """
-        pass
-
     # TODO Damian
     def shortestPath(self, startCell, goalCell):
         """
         Returns a list of map cells to visit for the shortest path from the start position to the goal position
         """
-        while False:
-            pass
+        queue = Queue(max_x*max_y)
 
-        listOfCellsToVisit = []#self.shortest_path_recur(startCell, goalCell, [], MAXINT)
+        sptSet = [False] * self.V
+ 
+        for cout in range(self.V):
+ 
+            # Pick the minimum distance vertex from
+            # the set of vertices not yet processed.
+            # x is always equal to src in first iteration
+            x = self.minDistance(dist, sptSet)
+ 
+            # Put the minimum distance vertex in the
+            # shortest path tree
+            sptSet[x] = True
+ 
+            # Update dist value of the adjacent vertices
+            # of the picked vertex only if the current
+            # distance is greater than new distance and
+            # the vertex in not in the shortest path tree
+            for y in range(self.V):
+                if self.graph[x][y] > 0 and sptSet[y] == False and \
+                dist[y] > dist[x] + self.graph[x][y]:
+                        dist[y] = dist[x] + self.graph[x][y]
+
+        listOfCellsToVisit = []
         return listOfCellsToVisit
 
     def getCell(self, x, y):
