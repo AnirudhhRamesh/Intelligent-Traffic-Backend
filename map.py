@@ -1,3 +1,4 @@
+from queue import Queue
 from xmlrpc.client import MAXINT
 import socket as Socket
 from typing import Any
@@ -26,8 +27,8 @@ class Map:
         self.filename = filename
         #self.map = self.parseFile("map.txt")
         self.map = self.parseFile(filename)
-        self.maxX = len(self.map)
-        self.maxY = len(self.map[0])
+        self.max_x = len(self.map)
+        self.max_y = len(self.map[0])
         
         #################
         self.printMap()
@@ -100,12 +101,10 @@ class Map:
     # def parseFile(self, filename):
     def printMap(self):
         array = []
-        
-        max_y = len(self.map[0])
-        max_x = len(self.map)
-        for y in range(max_y):
+
+        for y in range(self.max_y):
             d = []
-            for x in range(max_x):
+            for x in range(self.max_x):
                 cell = self.map[x][y]
                 dirString = ""
                 directions = cell.directions
@@ -145,32 +144,55 @@ class Map:
         """
         Returns a list of map cells to visit for the shortest path from the start position to the goal position
         """
-        queue = Queue(max_x*max_y)
+        queue = Queue(self.max_x*self.max_y)
+        queue.put(startCell)
+        predecessors =[[None for y in range(self.max_y)] for x in range(self.max_x)] 
 
-        sptSet = [False] * self.V
- 
-        for cout in range(self.V):
- 
-            # Pick the minimum distance vertex from
-            # the set of vertices not yet processed.
-            # x is always equal to src in first iteration
-            x = self.minDistance(dist, sptSet)
- 
-            # Put the minimum distance vertex in the
-            # shortest path tree
-            sptSet[x] = True
- 
-            # Update dist value of the adjacent vertices
-            # of the picked vertex only if the current
-            # distance is greater than new distance and
-            # the vertex in not in the shortest path tree
-            for y in range(self.V):
-                if self.graph[x][y] > 0 and sptSet[y] == False and \
-                dist[y] > dist[x] + self.graph[x][y]:
-                        dist[y] = dist[x] + self.graph[x][y]
+        while not queue.empty:
+            cell = queue.get()
 
-        listOfCellsToVisit = []
-        return listOfCellsToVisit
+            for direction in cell.directions:
+                newCell = None
+                match direction:
+                    case Direction.UP:
+                        if predecessors[cell.x][cell.y + 1] == None:
+                            newCell = self.map[cell.x][cell.y + 1]
+                            predecessors[cell.x][cell.y + 1] = cell
+                            queue.put(newCell)
+                            if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
+                                break
+
+                    case Direction.DOWN:
+                        if predecessors[cell.x][cell.y - 1] == None:
+                            newCell = self.map[cell.x][cell.y - 1]
+                            predecessors[cell.x][cell.y - 1] = cell
+                            queue.put(newCell)
+                            if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
+                                break
+                    
+                    case Direction.RIGHT:
+                        if predecessors[cell.x + 1][cell.y] == None:
+                            newCell = self.map[cell.x + 1][cell.y]
+                            predecessors[cell.x + 1][cell.y] = cell
+                            queue.put(newCell)
+                            if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
+                                break
+
+                    case Direction.LEFT:
+                        if predecessors[cell.x - 1][cell.y] == None:
+                            newCell = self.map[cell.x - 1][cell.y]
+                            predecessors[cell.x - 1][cell.y] = cell
+                            queue.put(newCell)
+                            if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
+                                break
+        
+        current = goalCell
+        cellsToVisit = []
+        while current != startCell:
+            cellsToVisit.append(current)
+            current = predecessors[current.x][current.y]
+
+        return cellsToVisit.reverse
 
     def getCell(self, x, y):
         return self.map[x][y]
