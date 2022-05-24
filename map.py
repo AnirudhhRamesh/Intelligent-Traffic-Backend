@@ -148,14 +148,14 @@ class Map:
         queue.put(startCell)
         predecessors =[[None for y in range(self.max_y)] for x in range(self.max_x)] 
 
-        while not queue.empty:
+        while not queue.empty():
             cell = queue.get()
 
             for direction in cell.directions:
                 newCell = None
                 match direction:
                     case Direction.UP:
-                        if predecessors[cell.x][cell.y + 1] == None:
+                        if predecessors[cell.x][cell.y + 1] is None:
                             newCell = self.map[cell.x][cell.y + 1]
                             predecessors[cell.x][cell.y + 1] = cell
                             queue.put(newCell)
@@ -163,7 +163,7 @@ class Map:
                                 break
 
                     case Direction.DOWN:
-                        if predecessors[cell.x][cell.y - 1] == None:
+                        if predecessors[cell.x][cell.y - 1] is None:
                             newCell = self.map[cell.x][cell.y - 1]
                             predecessors[cell.x][cell.y - 1] = cell
                             queue.put(newCell)
@@ -171,7 +171,7 @@ class Map:
                                 break
                     
                     case Direction.RIGHT:
-                        if predecessors[cell.x + 1][cell.y] == None:
+                        if predecessors[cell.x + 1][cell.y] is None:
                             newCell = self.map[cell.x + 1][cell.y]
                             predecessors[cell.x + 1][cell.y] = cell
                             queue.put(newCell)
@@ -179,7 +179,7 @@ class Map:
                                 break
 
                     case Direction.LEFT:
-                        if predecessors[cell.x - 1][cell.y] == None:
+                        if predecessors[cell.x - 1][cell.y] is None:
                             newCell = self.map[cell.x - 1][cell.y]
                             predecessors[cell.x - 1][cell.y] = cell
                             queue.put(newCell)
@@ -188,6 +188,7 @@ class Map:
         
         current = goalCell
         cellsToVisit = []
+        print(predecessors)
         while current != startCell:
             cellsToVisit.append(current)
             current = predecessors[current.x][current.y]
