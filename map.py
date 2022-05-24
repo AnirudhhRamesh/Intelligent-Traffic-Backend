@@ -34,8 +34,8 @@ class Map:
         
         
         self.cars = {
-            "Car1 id" : car.Car("Car1 id", "car1 hardware socket", self.map),
-            "Car2 id" : car.Car("Car2 id", "socket", self.map)
+            "Car1 id" : car.Car("Car1 id", "car1 hardware socket", self),
+            "Car2 id" : car.Car("Car2 id", "socket", self)
          }
         
     
