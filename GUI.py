@@ -69,16 +69,17 @@ class GUI:
                     pos = pygame.mouse.get_pos()
                     column = pos[0] // (cell_width+margin)
                     row = pos[1] // (cell_height+margin)
-                    if self.map.map[column][row].isRoad: 
+                    if self.map.map[column][row].isRoad and not self.map.map[column][row].hasPassenger: 
                         grid[column][row] = 1
                         self.map.add_passenger(Passenger(self.map.getCell(column, row), self.map.getCell(randint(0, 16), randint(0,8))))
+                        self.map.map[column][row].hasPassenger = True
                         
 
             #Draw the grid
             for row in range(len(grid[0])):
                 for column in range(len(grid)):
                     color = BLACK
-                    if self.map.map[column][row].isRoad:
+                    if self.map.map[column][row].isRoad and not self.map.map[column][row].hasPassenger:
                         color = WHITE
                     # else:
                     #     color = BLACK

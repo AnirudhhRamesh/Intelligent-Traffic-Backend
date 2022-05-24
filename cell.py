@@ -6,6 +6,7 @@ class Cell:
         
         self.isRoad = isRoad
         self.directions = directions
+        self.hasPassenger = False
 
     def getDirections(self):
         self.directions

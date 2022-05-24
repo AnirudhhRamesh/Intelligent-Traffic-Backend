@@ -11,3 +11,7 @@ class Passenger:
     def __init__(self, start:cell.Cell, goal:cell.Cell):
         self.start = start
         self.goal = goal
+        self.inCar = False
+
+    def taken(self):
+        self.taken = True
