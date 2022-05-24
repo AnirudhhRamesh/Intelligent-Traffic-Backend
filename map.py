@@ -3,7 +3,7 @@ from xmlrpc.client import MAXINT
 import socket as Socket
 from typing import Any
 from direction import Direction
-import car as Car
+import car
 from cell import Cell
 import passenger as Passenger
 import numpy as np
@@ -35,10 +35,10 @@ class Map:
         #################
         
         
-        self.cars = {
-             "Car1 id" : Car.Car("Car1 id", "car1 hardware socket", self.map),
-             "Car2 id" : Car.Car("Car2 id", "socket", self.map)
-        }
+        # self.cars = {
+        #      "Car1 id" : car.Car("Car1 id", "car1 hardware socket", self.map),
+        #      "Car2 id" : car.Car("Car2 id", "socket", self.map)
+        # }
         
     
 
@@ -240,5 +240,5 @@ class Map:
 
         pass
 
-# testMap = Map("map.csv")
-# testMap.shortestPath(testMap.map[10][4], testMap.map[12][0])
+testMap = Map("map.csv")
+testMap.shortestPath(testMap.map[10][4], testMap.map[12][0])
