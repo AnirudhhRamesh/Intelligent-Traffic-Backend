@@ -192,6 +192,7 @@ class Map:
             cellsToVisit.append(current)
             current = predecessors[current.x][current.y]
 
+        print(cellsToVisit.reverse)
         return cellsToVisit.reverse
 
     def getCell(self, x, y):
@@ -226,3 +227,6 @@ class Map:
         #Init-single-source(G, s): -> G, s
 
         pass
+
+testMap = Map("map.csv")
+testMap.shortestPath(testMap.map[10][4], testMap.map[12][0])
