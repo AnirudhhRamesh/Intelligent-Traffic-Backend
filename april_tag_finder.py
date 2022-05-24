@@ -71,7 +71,7 @@ class FileVideoStream:
 
 
         print("starting stream!")
-        corner_ids = [4,9,0,6]
+        corner_ids = [4,18,0,6] #[4,9,0,6]
         tr = Translator(corner_ids[0], corner_ids[1], corner_ids[2],corner_ids[3], 16,9,at_detector)
 
         #map2d = Map.parseFile("map.txt")

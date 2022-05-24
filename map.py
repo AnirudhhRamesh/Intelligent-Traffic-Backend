@@ -157,7 +157,7 @@ class Map:
                     case Direction.UP:
                         if predecessors[cell.x][min(cell.y + 1, self.max_y - 1)] is None:
                             newCell = self.map[cell.x][cell.y + 1]
-                            predecessors[cell.x][cell.y + 1] = cell
+                            predecessors[newCell.x][newCell.y] = cell
                             queue.put(newCell)
                             if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
                                 break
@@ -165,7 +165,7 @@ class Map:
                     case Direction.DOWN:
                         if predecessors[cell.x][max(0, cell.y - 1)] is None:
                             newCell = self.map[cell.x][cell.y - 1]
-                            predecessors[cell.x][cell.y - 1] = cell
+                            predecessors[newCell.x][newCell.y] = cell
                             queue.put(newCell)
                             if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
                                 break
@@ -173,7 +173,7 @@ class Map:
                     case Direction.RIGHT:
                         if predecessors[min(cell.x + 1, self.max_x - 1)][cell.y] is None:
                             newCell = self.map[cell.x + 1][cell.y]
-                            predecessors[cell.x + 1][cell.y] = cell
+                            predecessors[newCell.x][newCell.y] = cell
                             queue.put(newCell)
                             if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
                                 break
@@ -181,11 +181,14 @@ class Map:
                     case Direction.LEFT:
                         if predecessors[max(0, cell.x - 1)][cell.y] is None:
                             newCell = self.map[cell.x - 1][cell.y]
-                            predecessors[cell.x - 1][cell.y] = cell
+                            predecessors[newCell.x][newCell.y] = cell
                             queue.put(newCell)
                             if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
                                 break
+        if(predecessors[goalCell.x][goalCell.y] is None):
+            print("no path found........")
         
+        print("goal pred", predecessors[goalCell.x][goalCell.y])
         current = goalCell
         cellsToVisit = []
         print(predecessors)
@@ -193,8 +196,16 @@ class Map:
             cellsToVisit.append(current)
             current = predecessors[current.x][current.y]
 
-        print(cellsToVisit.reverse)
-        return cellsToVisit.reverse
+        print("")
+        print("-------------------------------------")
+        print(cellsToVisit)
+        cellsToVisit.reverse()
+        path = np.array(cellsToVisit)
+        for cell in path:
+            print("(", cell.x, cell.y, ")")
+        # print(path)
+        print("")
+        return path
 
     def getCell(self, x, y):
         return self.map[x][y]
