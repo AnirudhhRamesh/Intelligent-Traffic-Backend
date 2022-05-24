@@ -63,5 +63,3 @@ def init_cars():
 
 if __name__ == "__main__":
     main()
-
-

@@ -24,8 +24,8 @@ class Map:
         self.max_y = len(self.map[0])
         #List of all the cars and their positions
         self.cars_positions_dict = {
-            "Car1 id" : (4, 5),
-            "Car2 id" : (12, 2)
+            "Car1 id" : (0, 0),
+            "Car2 id" : (16, 16)
         }
         
         #################
@@ -134,8 +134,9 @@ class Map:
         """
         Add a passenger to a specific map cell and assign the passenger to a car
         """
-        self.passengers.append(passenger)
         self.assign_passenger(passenger)
+        self.passengers.append(passenger)
+
 
     # TODO Damian
     def shortestPath(self, startCell, goalCell):
@@ -183,13 +184,13 @@ class Map:
                             queue.put(newCell)
                             if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
                                 break
+        print(predecessors)
         if(predecessors[goalCell.x][goalCell.y] is None):
             print("no path found........")
         
         print("goal pred", predecessors[goalCell.x][goalCell.y])
         current = goalCell
         cellsToVisit = []
-        print(predecessors)
         while current != startCell:
             cellsToVisit.append(current)
             current = predecessors[current.x][current.y]
@@ -198,12 +199,11 @@ class Map:
         print("-------------------------------------")
         print(cellsToVisit)
         cellsToVisit.reverse()
-        path = np.array(cellsToVisit)
-        for cell in path:
+        for cell in cellsToVisit:
             print("(", cell.x, cell.y, ")")
         # print(path)
         print("")
-        return path
+        return cellsToVisit
 
     def getCell(self, x, y):
         return self.map[x][y]
@@ -213,8 +213,9 @@ class Map:
         """
         Assigns a newly generated passenger to the car whose last destination is closest to the passenger cell
         """
-        shortestPath = 10000
+        shortestPathLength = 10000
         shortestPathCar = Any
+        shortestPath = []
 
         #TODO Alexander
         #for car in cars:
@@ -225,16 +226,16 @@ class Map:
 
         #Find the car with the shortest path to the next passenger
         for (carId, car) in self.cars.items():
-            print(f"Map type: {type(self.map)}")
             if not car.passengers:
                 newPath = self.shortestPath(self.getCell(car.position()[0], car.position()[1]), passenger.start)
+                shortestPathCar = car
             else:
-                newPath = len(self.shortestPath(car.passengers[-1].goal, passenger.start))
-                if shortestPath > newPath:
-                    shortestPath = newPath
-                    shortestPathCar = car
-
-        shortestPathCar.add_passenger_destination(passenger)
+                newPath = self.shortestPath(car.passengers[-1].goal, passenger.start)
+            if shortestPathLength > len(newPath):
+                shortestPath = newPath
+                shortestPathLength = len(newPath)
+                shortestPathCar = car
+        shortestPathCar.add_passenger_destination(passenger, shortestPath)
     
     def initSingleSource(G, s):
         #Init-single-source(G, s): -> G, s
@@ -243,4 +244,3 @@ class Map:
 
 #testMap = Map("map2.csv")
 #testMap.shortestPath(testMap.map[10][4], testMap.map[12][0])
-

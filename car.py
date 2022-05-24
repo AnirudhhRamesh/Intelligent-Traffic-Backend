@@ -2,12 +2,14 @@
 
 #global positions dictionary
 from ast import Pass
-import map
+from traceback import print_tb
+
+import numpy
 from passenger import Passenger
 
 carPositions = {
-    "car_1" : (3,5),
-    "car_2" : (14, 32)
+    "car_1" : (0,0),
+    "car_2" : (16, 16)
 }
 
 class Car:
@@ -19,7 +21,7 @@ class Car:
         self.isMoving = True
         self.socket = socket
         self.map = map
-        self.passengers: list[Passenger] = []
+        self.passengers = []
 
     def position(self):
         return self.map.cars_positions_dict.get(self.id)
@@ -49,14 +51,15 @@ class Car:
     #        adjust_angle()   
     #    pass
     
-    def add_passenger_destination(self, newPassenger):
+    def add_passenger_destination(self, newPassenger: Passenger, path):
         """
         Adds the given passenger to the car's list of passengers.
         Appends the shortest path from the last passenger to the newly added passenger to the car's cellsToVisit
         """
         self.passengers.append(newPassenger)
-        self.cellsToVisit.append(map.Map.shortestPath(self.map, self.lastPassenger.start, newPassenger.goal))
-        self.cellsToVisit.append(map.Map.shortest_path_recur(self.map, newPassenger.start, newPassenger.goal))
+        print(type(path))
+        print(type(self.cellsToVisit))
+        self.cellsToVisit += path
     
     def lastPassenger(self):
         """
