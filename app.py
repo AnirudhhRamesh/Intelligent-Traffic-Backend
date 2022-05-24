@@ -6,7 +6,8 @@ import cell
 import passenger
 
 import car
-map_filename = "map.txt"
+import GUI
+map_filename = "map.csv"
 
 #cars = [(bluetooth_mac, socket, carid, car),()]
 
@@ -18,6 +19,9 @@ def main():
     myMap = map.Map(map_filename)
     myMap.printMap()
 
+    #initiate GUI
+    gui = GUI.GUI(myMap)
+    gui.launchGUI()
     #Connect to the cars
     #init_cars()
     #april_tag_manager = april_tags()

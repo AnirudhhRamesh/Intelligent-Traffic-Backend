@@ -32,10 +32,10 @@ class Map:
         #################
         
         
-        # self.cars = {
-        #     "Car1 id" : Car("Car1 id", "car1 hardware socket", self.map),
-        #     "Car2 id" : Car("Car2 id", "socket", self.map)
-        # }
+        self.cars = {
+             "Car1 id" : Car.Car("Car1 id", "car1 hardware socket", self.map),
+             "Car2 id" : Car.Car("Car2 id", "socket", self.map)
+        }
         
     
 
