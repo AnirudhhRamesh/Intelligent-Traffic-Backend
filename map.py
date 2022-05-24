@@ -26,6 +26,8 @@ class Map:
         self.filename = filename
         #self.map = self.parseFile("map.txt")
         self.map = self.parseFile(filename)
+        self.maxX = len(self.map)
+        self.maxY = len(self.map[0])
         
         #################
         self.printMap()
