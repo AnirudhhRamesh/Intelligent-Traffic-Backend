@@ -155,7 +155,7 @@ class Map:
                 newCell = None
                 match direction:
                     case Direction.UP:
-                        if predecessors[cell.x][cell.y + 1] is None:
+                        if predecessors[cell.x][min(cell.y + 1, self.max_y - 1)] is None:
                             newCell = self.map[cell.x][cell.y + 1]
                             predecessors[cell.x][cell.y + 1] = cell
                             queue.put(newCell)
@@ -163,7 +163,7 @@ class Map:
                                 break
 
                     case Direction.DOWN:
-                        if predecessors[cell.x][cell.y - 1] is None:
+                        if predecessors[cell.x][max(0, cell.y - 1)] is None:
                             newCell = self.map[cell.x][cell.y - 1]
                             predecessors[cell.x][cell.y - 1] = cell
                             queue.put(newCell)
@@ -171,7 +171,7 @@ class Map:
                                 break
                     
                     case Direction.RIGHT:
-                        if predecessors[cell.x + 1][cell.y] is None:
+                        if predecessors[min(cell.x + 1, self.max_x - 1)][cell.y] is None:
                             newCell = self.map[cell.x + 1][cell.y]
                             predecessors[cell.x + 1][cell.y] = cell
                             queue.put(newCell)
@@ -179,7 +179,7 @@ class Map:
                                 break
 
                     case Direction.LEFT:
-                        if predecessors[cell.x - 1][cell.y] is None:
+                        if predecessors[max(0, cell.x - 1)][cell.y] is None:
                             newCell = self.map[cell.x - 1][cell.y]
                             predecessors[cell.x - 1][cell.y] = cell
                             queue.put(newCell)
