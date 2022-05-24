@@ -240,5 +240,5 @@ class Map:
 
         pass
 
-testMap = Map("map.csv")
-testMap.shortestPath(testMap.map[10][4], testMap.map[12][0])
+# testMap = Map("map.csv")
+# testMap.shortestPath(testMap.map[10][4], testMap.map[12][0])

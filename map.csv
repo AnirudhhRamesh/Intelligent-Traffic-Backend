@@ -1,9 +1,9 @@
 up/down,X,X,X,X,up/right,left/down,x,down,x,down,right/down,down/left,up,x,up
 up/down/left,left/down,X,x,x,x,up/down,x,down,x,down/up,up,down,up,x,up
 down,up/right,left,left/down,x,x,up/down,x,down,x,down/up,up,down,up,x,up
-up/down/left,X,X,up/right,right/left,left/right,up/left,x,down,x,down/up,up,down,up,x,up
-up/down/left,left/down,X,x,x,x,up,x,right/up/down,right,down/left/up,up,down/right,up,x,up
-down,up/right,left,right,x,x,up,x,up,x,down,up,down,up,x,up
-up/down/left,X,X,X,X,right/down,up/left,x,up,x,down,up,down,up,x,up
-up/right,down/left/down,X,x,right/down,left/up,up,x,up,x,down,up,down,up,x,up
-x,right/up,right,right,up/left,x,up,x,up,x,right/up,up/left,right/up,up/left,x,up
+up/down,X,X,up/right,right/left,left/right,up/left/down,x,down,x,down/up,up,down,up,x,up
+up/down/left,left/down,X,x,x,x,up/down,x,right/up/down,right,down/left/up,up,down/right,up,x,up
+down,up/right,left,right,x,x,up/down,x,up,x,down,up,down,up,x,up
+up/down/left,X,X,X,X,right/down,up/left/down,x,up,x,down,up,down,up,x,up
+up/right,down/left/down,X,x,right/down,left/up,up/down,x,up,x,down,up,down,up,x,up
+x,right/up,right,right,up/left,x,up/right,left/right,up/left,x,right/up,up/left,right/up,up/left,x,up

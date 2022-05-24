@@ -104,7 +104,7 @@ class FileVideoStream:
             
             if tr.foundCorners():
                 # print("hello")
-                cv2.circle(frame_in, (int(tr.inverse(8,4)[0]),int(tr.inverse(8,4)[1])),30,(0,255,0),1)
+                # cv2.circle(frame_in, (int(tr.inverse(8,4)[0]),int(tr.inverse(8,4)[1])),30,(0,255,0),1)
                 
                 sideLength_x = abs(tr.id2Coords[0] - tr.id1Coords[0])
                 sideLength_y = abs(tr.id4Coords[1] - tr.id1Coords[1])
