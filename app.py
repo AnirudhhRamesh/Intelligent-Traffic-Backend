@@ -1,5 +1,4 @@
 #App.py
-import april_tags
 
 import map
 import cell
@@ -7,7 +6,7 @@ import passenger
 
 import car
 import GUI
-map_filename = "map.csv"
+map_filename = "map2.csv"
 
 #cars = [(bluetooth_mac, socket, carid, car),()]
 

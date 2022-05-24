@@ -1,7 +1,9 @@
 #Car Model class
 
 #global positions dictionary
+from ast import Pass
 import map
+from passenger import Passenger
 
 carPositions = {
     "car_1" : (3,5),
@@ -9,8 +11,6 @@ carPositions = {
 }
 
 class Car:
-    
-    passengers = [] #List of passenger cells to visit
     cellsToVisit = [] #List of cells to visit
 
    #Init methods 
@@ -19,6 +19,7 @@ class Car:
         self.isMoving = True
         self.socket = socket
         self.map = map
+        self.passengers: list[Passenger] = []
 
     def position(self):
         return self.map.cars_positions_dict.get(self.id)

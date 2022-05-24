@@ -34,11 +34,11 @@ class GUI:
         BLACK = (0, 0, 0)
         WHITE = (255, 255, 255)
     
-        MAX_X = 613
-        MAX_Y = 347
+        MAX_X = 600
+        MAX_Y = 600
 
-        cell_width = cell_height = 33
-        margin = 5
+        cell_width = cell_height = MAX_X/(len(self.map.map)+1)
+        margin = 1
 
         # window size
         DISPLAYSURF = pygame.display.set_mode((MAX_X, MAX_Y))
@@ -58,6 +58,21 @@ class GUI:
             for column in range(len(self.map.map[0])):
                 grid[row].append(0)
 
+        #Draw the grid
+        for row in range(len(grid[0])):
+            for column in range(len(grid)):
+                color = BLACK
+                if self.map.map[column][row].isRoad and not self.map.map[column][row].hasPassenger:
+                    color = WHITE
+                # else:
+                #     color = BLACK
+                if grid[column][row] == 1:
+                    color = GREEN
+                pygame.draw.rect(DISPLAYSURF, 
+                                 color, 
+                                 [(margin+cell_width)*column+margin,
+                                 (margin+cell_height)*row+margin, cell_width, cell_height])    
+
         #Game loop begins
         while True:        
             pygame.display.update()
@@ -67,30 +82,13 @@ class GUI:
                     sys.exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     pos = pygame.mouse.get_pos()
-                    column = pos[0] // (cell_width+margin)
-                    row = pos[1] // (cell_height+margin)
+                    column = int(pos[0] // (cell_width+margin))
+                    row = int(pos[1] // (cell_height+margin))
                     if self.map.map[column][row].isRoad and not self.map.map[column][row].hasPassenger: 
                         grid[column][row] = 1
-                        self.map.add_passenger(Passenger(self.map.getCell(column, row), self.map.getCell(randint(0, 16), randint(0,8))))
+                        self.map.add_passenger(Passenger(self.map.getCell(column, row), self.map.getCell(randint(0, len(self.map.map)), randint(0,len(self.map.map[0])))))
                         self.map.map[column][row].hasPassenger = True
                         
-
-            #Draw the grid
-            for row in range(len(grid[0])):
-                for column in range(len(grid)):
-                    color = BLACK
-                    if self.map.map[column][row].isRoad and not self.map.map[column][row].hasPassenger:
-                        color = WHITE
-                    # else:
-                    #     color = BLACK
-                    if grid[column][row] == 1:
-                        color = GREEN
-                    pygame.draw.rect(DISPLAYSURF, 
-                                     color, 
-                                     [(margin+cell_width)*column+margin,
-                                     (margin+cell_height)*row+margin, cell_width, cell_height])    
             FramePerSec.tick(FPS)
-
-
 
     pass

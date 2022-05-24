@@ -15,13 +15,6 @@ class Map:
 
     passengers = []
 
-    #List of all the cars and their positions
-    cars_positions_dict = {
-        "Car1 id" : (23, 43),
-        "Car2 id" : (12, 46)
-    }
-
-
     def __init__(self, filename) -> None:
         #Parse the file and generate the map
         self.filename = filename
@@ -29,6 +22,11 @@ class Map:
         self.map = self.parseFile(filename)
         self.max_x = len(self.map)
         self.max_y = len(self.map[0])
+        #List of all the cars and their positions
+        self.cars_positions_dict = {
+            "Car1 id" : (4, 5),
+            "Car2 id" : (12, 2)
+        }
         
         #################
         self.printMap()
@@ -36,8 +34,8 @@ class Map:
         
         
         self.cars = {
-             "Car1 id" : Car.Car("Car1 id", "car1 hardware socket", self.map),
-             "Car2 id" : Car.Car("Car2 id", "socket", self.map)
+             "Car1 id" : Car.Car("Car1 id", "car1 hardware socket", self),
+             "Car2 id" : Car.Car("Car2 id", "socket", self)
         }
         
     
@@ -228,10 +226,13 @@ class Map:
         #Find the car with the shortest path to the next passenger
         for (carId, car) in self.cars.items():
             print(f"Map type: {type(self.map)}")
-            newPath = len(self.shortestPath(car.lastPassenger.goal, passenger.start))
-            if shortestPath > newPath:
-                shortestPath = newPath
-                shortestPathCar = car
+            if not car.passengers:
+                newPath = self.shortestPath(self.getCell(car.position()[0], car.position()[1]), passenger.start)
+            else:
+                newPath = len(self.shortestPath(car.passengers[-1].goal, passenger.start))
+                if shortestPath > newPath:
+                    shortestPath = newPath
+                    shortestPathCar = car
 
         shortestPathCar.add_passenger_destination(passenger)
     
@@ -240,5 +241,5 @@ class Map:
 
         pass
 
-testMap = Map("map.csv")
-testMap.shortestPath(testMap.map[10][4], testMap.map[12][0])
+#testMap = Map("map2.csv")
+#testMap.shortestPath(testMap.map[10][4], testMap.map[12][0])
