@@ -23,20 +23,20 @@ class Map:
         self.max_x = len(self.map)
         self.max_y = len(self.map[0])
         #List of all the cars and their positions
-        self.cars_positions_dict = {
-            "Car1 id" : (0, 0),
-            "Car2 id" : (16, 16)
-        }
+        # self.cars_positions_dict = {
+        #     "Car1 id" : (0, 0),
+        #     "Car2 id" : (16, 16)
+        # }
         
         #################
         self.printMap()
         #################
         
         
-        self.cars = {
-            "Car1 id" : car.Car("Car1 id", "car1 hardware socket", self),
-            "Car2 id" : car.Car("Car2 id", "socket", self)
-         }
+        # self.cars = {
+        #     "Car1 id" : car.Car("Car1 id", "car1 hardware socket", self),
+        #     "Car2 id" : car.Car("Car2 id", "socket", self)
+        #  }
         
     
 
