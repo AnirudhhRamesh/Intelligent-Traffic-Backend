@@ -112,12 +112,11 @@ class Map:
                 else:                       
                     for dir in directions:
                         dirString += Direction.toString(dir)
-                    match length:
-                        case 1:
+                        if length == 1:
                             dirString = " " + dirString + "  "
-                        case 2:
+                        elif length == 2:
                             dirString = " " + dirString + " "
-                        case 3:
+                        elif length == 3:
                             dirString += " "
                 d.append(dirString)
             array.append(d)
@@ -152,38 +151,37 @@ class Map:
 
             for direction in cell.directions:
                 newCell = None
-                match direction:
-                    case Direction.UP:
-                        if predecessors[cell.x][min(cell.y + 1, self.max_y - 1)] is None:
-                            newCell = self.map[cell.x][cell.y + 1]
-                            predecessors[newCell.x][newCell.y] = cell
-                            queue.put(newCell)
-                            if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
-                                break
+                if direction == Direction.UP:
+                    if predecessors[cell.x][min(cell.y + 1, self.max_y - 1)] is None:
+                        newCell = self.map[cell.x][cell.y + 1]
+                        predecessors[newCell.x][newCell.y] = cell
+                        queue.put(newCell)
+                        if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
+                            break
 
-                    case Direction.DOWN:
-                        if predecessors[cell.x][max(0, cell.y - 1)] is None:
-                            newCell = self.map[cell.x][cell.y - 1]
-                            predecessors[newCell.x][newCell.y] = cell
-                            queue.put(newCell)
-                            if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
-                                break
+                elif direction == Direction.DOWN:
+                    if predecessors[cell.x][max(0, cell.y - 1)] is None:
+                        newCell = self.map[cell.x][cell.y - 1]
+                        predecessors[newCell.x][newCell.y] = cell
+                        queue.put(newCell)
+                        if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
+                            break
                     
-                    case Direction.RIGHT:
-                        if predecessors[min(cell.x + 1, self.max_x - 1)][cell.y] is None:
-                            newCell = self.map[cell.x + 1][cell.y]
-                            predecessors[newCell.x][newCell.y] = cell
-                            queue.put(newCell)
-                            if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
-                                break
+                if direction == Direction.RIGHT:
+                    if predecessors[min(cell.x + 1, self.max_x - 1)][cell.y] is None:
+                        newCell = self.map[cell.x + 1][cell.y]
+                        predecessors[newCell.x][newCell.y] = cell
+                        queue.put(newCell)
+                        if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
+                            break
 
-                    case Direction.LEFT:
-                        if predecessors[max(0, cell.x - 1)][cell.y] is None:
-                            newCell = self.map[cell.x - 1][cell.y]
-                            predecessors[newCell.x][newCell.y] = cell
-                            queue.put(newCell)
-                            if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
-                                break
+                if direction == Direction.LEFT:
+                    if predecessors[max(0, cell.x - 1)][cell.y] is None:
+                        newCell = self.map[cell.x - 1][cell.y]
+                        predecessors[newCell.x][newCell.y] = cell
+                        queue.put(newCell)
+                        if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
+                            break
         print(predecessors)
         if(predecessors[goalCell.x][goalCell.y] is None):
             print("no path found........")
