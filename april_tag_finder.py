@@ -73,7 +73,7 @@ class FileVideoStream:
 
 
         print("starting stream!")
-        corner_ids = [4,9,0,6]
+        corner_ids = [4,9,0,6]# [4,18,0,6]
         tr = Translator(corner_ids[0], corner_ids[1], corner_ids[2],corner_ids[3], self.map.max_x, self.map.max_y,at_detector)
 
         #map2d = Map.parseFile("map.txt")
@@ -118,6 +118,13 @@ class FileVideoStream:
                         cv2.circle(frame_in, (int(tr.inverse(i,j)[0]),int(tr.inverse(i,j)[1])),5,(0,0,255),1)
                         # cv2.circle(frame_in, (int(tr.inverse(8,4)[0]),int(tr.inverse(8,4)[1])),30,(0,255,0),1)
 
+                        #check if its a corner:
+                        if (i == 0 and j == 0 
+                            or i == 0 and j == max_yi
+                            or i == max_xi and j == 0
+                            or i == max_xi and j == max_yi):
+                            continue
+                        
                         if self.myMap[i][j].isRoad:
                             cell = self.myMap[i][j]
                             directions = cell.directions
@@ -128,81 +135,90 @@ class FileVideoStream:
                             if drawUpDown or drawLeftRight:
                                 dir = directions[0]
                                 #vertical line
-                                if dir == Direction.UP or dir == Direction.DOWN:
-                                    cv2.line(frame_in, 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1]) - int(squareSide_y/2)), 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1]) - int(2.0/4 * squareSide_y/2)), 
-                                            (0,255,255), 1)
-                                    cv2.line(frame_in, 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1]) + int(2.0/4 * squareSide_y/2)), 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1]) + int(squareSide_y/2)), 
-                                            (0,255,255), 1)
+                                # if dir == Direction.UP or dir == Direction.DOWN:
                                     
+                                    # when dir == up: draw middle line, and when dir == left
+                                
+                                if dir == Direction.UP and Direction.RIGHT not in self.myMap[max(0, i-1)][j].directions or (dir == Direction.RIGHT and Direction.UP in self.myMap[i][max(0, j-1)].directions and len(self.myMap[i][max(0, j-1)].directions) == 1):
                                     cv2.line(frame_in, 
                                             (int(tr.inverse(i,j)[0] - squareSide_x/2), int(tr.inverse(i,j)[1]) - int(squareSide_y/2)), 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2), int(tr.inverse(i,j)[1]) + int(squareSide_y/2)), 
-                                            (0,0,0), 1)
+                                            (int(tr.inverse(i,j)[0] - squareSide_x/2), int(tr.inverse(i,j)[1]) - int(2.0/4 * squareSide_y/2)), 
+                                            (0,255,255), 1)
                                     cv2.line(frame_in, 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x), int(tr.inverse(i,j)[1]) - int(squareSide_y/2)), 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x), int(tr.inverse(i,j)[1]) + int(squareSide_y/2)), 
-                                            (0,0,0), 1)
+                                            (int(tr.inverse(i,j)[0] - squareSide_x/2), int(tr.inverse(i,j)[1]) + int(2.0/4 * squareSide_y/2)), 
+                                            (int(tr.inverse(i,j)[0] - squareSide_x/2), int(tr.inverse(i,j)[1]) + int(squareSide_y/2)), 
+                                            (0,255,255), 1)
+                                    #left side
+                                    # if dir == Direction.DOWN:
+                                    #     cv2.line(frame_in, 
+                                    #             (int(tr.inverse(i,j)[0] - squareSide_x/2), int(tr.inverse(i,j)[1]) - int(squareSide_y/2)), 
+                                    #             (int(tr.inverse(i,j)[0] - squareSide_x/2), int(tr.inverse(i,j)[1]) + int(squareSide_y/2)), 
+                                    #             (0,0,0), 1)
+                                    # #right side
+                                    # if dir == Direction.UP:
+                                    #     cv2.line(frame_in, 
+                                    #             (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x), int(tr.inverse(i,j)[1]) - int(squareSide_y/2)), 
+                                    #             (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x), int(tr.inverse(i,j)[1]) + int(squareSide_y/2)), 
+                                    #             (0,0,0), 1)
                                     
                                 #horizontal line   
-                                else:
+                                # else:
+                                if dir == Direction.LEFT and Direction.UP not in self.myMap[i][max(0, j-1)].directions or ((dir == Direction.UP and Direction.LEFT in self.myMap[min(max_xi-1, i+1)][j].directions and len(self.myMap[min(max_xi-1, i+1)][j].directions) == 1)):
                                     cv2.line(frame_in, 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2), int(tr.inverse(i,j)[1])), 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(1.0/4 *squareSide_x), int(tr.inverse(i,j)[1])), 
+                                            (int(tr.inverse(i,j)[0] - squareSide_x/2), int(tr.inverse(i,j)[1] + squareSide_y/2)), 
+                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(1.0/4 *squareSide_x), int(tr.inverse(i,j)[1] + squareSide_y/2)), 
                                             (0,255,255), 1)
                                     cv2.line(frame_in, 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(3.0/4 * squareSide_x), int(tr.inverse(i,j)[1])), 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2 + squareSide_x), int(tr.inverse(i,j)[1])), 
+                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(3.0/4 * squareSide_x), int(tr.inverse(i,j)[1] + squareSide_y/2)), 
+                                            (int(tr.inverse(i,j)[0] - squareSide_x/2 + squareSide_x), int(tr.inverse(i,j)[1] + squareSide_y/2)), 
                                             (0,255,255), 1)
-                                    
-                                    cv2.line(frame_in, 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2), int(tr.inverse(i,j)[1]) - int(squareSide_y/2)), 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x), int(tr.inverse(i,j)[1]) - int(squareSide_y/2)), 
-                                            (0,0,0), 1)
-                                    cv2.line(frame_in, 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2), int(tr.inverse(i,j)[1]) + int(squareSide_y/2)), 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x), int(tr.inverse(i,j)[1]) + int(squareSide_y/2)), 
-                                            (0,0,0), 1)
-                            elif len(directions) == 2:
-                                if Direction.UP in directions and Direction.LEFT in directions:
-                                    cv2.line(frame_in, 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2), int(tr.inverse(i,j)[1])), 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2 + 1/2 * squareSide_x), int(tr.inverse(i,j)[1])), 
-                                            (0,255,255), 1)
-                                    cv2.line(frame_in, 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1]) - int(squareSide_y/2)), 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1])), 
-                                            (0,255,255), 1)
-                                elif Direction.UP in directions and Direction.RIGHT in directions:
-                                    cv2.line(frame_in, 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2 + 1/2 * squareSide_x), int(tr.inverse(i,j)[1])), 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2 + squareSide_x), int(tr.inverse(i,j)[1])), 
-                                            (0,255,255), 1)
-                                    cv2.line(frame_in, 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1]) - int(squareSide_y/2)), 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1])), 
-                                            (0,255,255), 1)
-                                elif Direction.DOWN in directions and Direction.LEFT in directions:
-                                    cv2.line(frame_in, 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2), int(tr.inverse(i,j)[1])), 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2 + 1/2 * squareSide_x), int(tr.inverse(i,j)[1])), 
-                                            (0,255,255), 1)
-                                    cv2.line(frame_in, 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1]) + int(squareSide_y/2)), 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1])), 
-                                            (0,255,255), 1)
-                                elif Direction.DOWN in directions and Direction.RIGHT in directions:
-                                    cv2.line(frame_in, 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2 + 1/2 * squareSide_x), int(tr.inverse(i,j)[1])), 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2 + squareSide_x), int(tr.inverse(i,j)[1])), 
-                                            (0,255,255), 1)
-                                    cv2.line(frame_in, 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1]) + int(squareSide_y/2)), 
-                                            (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1])), 
-                                            (0,255,255), 1)
+                                    # if dir == Direction.LEFT:
+                                    #     cv2.line(frame_in, 
+                                    #             (int(tr.inverse(i,j)[0] - squareSide_x/2), int(tr.inverse(i,j)[1]) - int(squareSide_y/2)), 
+                                    #             (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x), int(tr.inverse(i,j)[1]) - int(squareSide_y/2)), 
+                                    #             (0,0,0), 1)
+                                    # if dir == Direction.RIGHT:
+                                    #     cv2.line(frame_in, 
+                                    #             (int(tr.inverse(i,j)[0] - squareSide_x/2), int(tr.inverse(i,j)[1]) + int(squareSide_y/2)), 
+                                    #             (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x), int(tr.inverse(i,j)[1]) + int(squareSide_y/2)), 
+                                    #             (0,0,0), 1)
+                            # elif len(directions) == 2:
+                            #     if Direction.UP in directions and Direction.LEFT in directions:
+                            #         cv2.line(frame_in, 
+                            #                 (int(tr.inverse(i,j)[0] - squareSide_x/2), int(tr.inverse(i,j)[1])), 
+                            #                 (int(tr.inverse(i,j)[0] - squareSide_x/2 + 1/2 * squareSide_x), int(tr.inverse(i,j)[1])), 
+                            #                 (0,255,255), 1)
+                            #         cv2.line(frame_in, 
+                            #                 (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1]) - int(squareSide_y/2)), 
+                            #                 (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1])), 
+                            #                 (0,255,255), 1)
+                            #     elif Direction.UP in directions and Direction.RIGHT in directions:
+                            #         cv2.line(frame_in, 
+                            #                 (int(tr.inverse(i,j)[0] - squareSide_x/2 + 1/2 * squareSide_x), int(tr.inverse(i,j)[1])), 
+                            #                 (int(tr.inverse(i,j)[0] - squareSide_x/2 + squareSide_x), int(tr.inverse(i,j)[1])), 
+                            #                 (0,255,255), 1)
+                            #         cv2.line(frame_in, 
+                            #                 (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1]) - int(squareSide_y/2)), 
+                            #                 (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1])), 
+                            #                 (0,255,255), 1)
+                            #     elif Direction.DOWN in directions and Direction.LEFT in directions:
+                            #         cv2.line(frame_in, 
+                            #                 (int(tr.inverse(i,j)[0] - squareSide_x/2), int(tr.inverse(i,j)[1])), 
+                            #                 (int(tr.inverse(i,j)[0] - squareSide_x/2 + 1/2 * squareSide_x), int(tr.inverse(i,j)[1])), 
+                            #                 (0,255,255), 1)
+                            #         cv2.line(frame_in, 
+                            #                 (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1]) + int(squareSide_y/2)), 
+                            #                 (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1])), 
+                            #                 (0,255,255), 1)
+                            #     elif Direction.DOWN in directions and Direction.RIGHT in directions:
+                            #         cv2.line(frame_in, 
+                            #                 (int(tr.inverse(i,j)[0] - squareSide_x/2 + 1/2 * squareSide_x), int(tr.inverse(i,j)[1])), 
+                            #                 (int(tr.inverse(i,j)[0] - squareSide_x/2 + squareSide_x), int(tr.inverse(i,j)[1])), 
+                            #                 (0,255,255), 1)
+                            #         cv2.line(frame_in, 
+                            #                 (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1]) + int(squareSide_y/2)), 
+                            #                 (int(tr.inverse(i,j)[0] - squareSide_x/2) + int(squareSide_x/2), int(tr.inverse(i,j)[1])), 
+                            #                 (0,255,255), 1)
                         else:
                             cv2.rectangle(frame_in, 
                                             (int(tr.inverse(i,j)[0] - squareSide_x/2 ),int(tr.inverse(i,j)[1]) - int(squareSide_y/2)), 
