@@ -1,48 +1,67 @@
 #App.py
-import april_tags
 
+from sqlite3 import adapt
+
+import cv2
 import map
 import cell
 import passenger
+from camera import Camera
+from car import Car
 
-import car
+import socket
 import GUI
-map_filename = "map.csv"
+map_filename = "map2.csv"
 
 #cars = [(bluetooth_mac, socket, carid, car),()]
 
 def main():
     print("Starting program...")
-    print()
 
     #Parse the map
     myMap = map.Map(map_filename)
     myMap.printMap()
-
+    camera = Camera([4, 18, 0,6], [9], 9, 16, goal_ids=[8])
+    cars = init_cars(myMap, camera.tr)
     #initiate GUI
-    gui = GUI.GUI(myMap)
-    gui.launchGUI()
+    # gui = GUI.GUI(myMap)
+    # gui.launchGUI()
     #Connect to the cars
     #init_cars()
     #april_tag_manager = april_tags()
 
     #Add passenger (TODO Use gui/separate thread to listen for inputs)
-    newPassenger = passenger.Passenger(myMap.getCell(0,0), myMap.getCell(0, 0))
-    myMap.add_passenger(newPassenger)
+    # newPassenger = passenger.Passenger(myMap.getCell(0,0), myMap.getCell(0, 0))
+    # myMap.add_passenger(newPassenger)
 
     #TODO Alexander
-    #while True:
-        #april_tag_manager.update_car_positions #get car positions from camera and update global map 
-        #traffic_engine.accept_new_passengers() #accept new passengers and add points to cars' paths 
-        #for each car in cars: 
-        #    car.update()#find the next point in the path, and set the angle of the car to point there
-
-        
-
+    while True:
+        camera.update() #get car positions from camera and update global map 
+        for car in cars:
+           car.position(camera.get_pos(car.id))
+           car.direction(camera.get_dir(car.id))
+           car.set_goal(camera.get_goal_pos(car.goal_id))
+        for car in cars:
+           car.drive()#find the next point in the path, and set the angle of the car to point there
+        #draw
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+        cv2.imshow('camera', camera.frame_in)        
+    for car in cars:
+        car.stopDrive()
 
 #Initialize the car connections
-def init_cars():
-    pass
+def init_cars(map, tr,cars=[(9, '00:21:09:01:1e:fa')]):
+    car_list = []
+    for car in cars:
+        adapter_addr = car[1]
+        port = 1
+        s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+        s.connect((adapter_addr, port))
+        print(s)
+        newCar = Car(car[0], s, map, tr)
+        car_list.append(newCar)
+    return car_list
 
     """
     #Initialize the first car
@@ -64,5 +83,3 @@ def init_cars():
 
 if __name__ == "__main__":
     main()
-
-

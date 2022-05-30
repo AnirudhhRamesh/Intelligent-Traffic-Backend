@@ -1,39 +1,77 @@
 #Car Model class
 
 #global positions dictionary
-import map
+from ast import Pass
+from re import S
+from traceback import print_tb
+from car_commands import *
+import numpy
+from passenger import Passenger
 
-carPositions = {
-    "car_1" : (3,5),
-    "car_2" : (14, 32)
-}
+
 
 class Car:
-    
-    passengers = [] #List of passenger cells to visit
-    cellsToVisit = [] #List of cells to visit
 
    #Init methods 
-    def __init__(self, id, socket, map):
+    def __init__(self, id, socket, map,tr):
+        #FOR TESTING ONLY, REMOVE LATER
+        self.goal_id = 8
+
         self.id = id
-        self.isMoving = True
+        self.tr = tr
+        self.isMoving = False
+        self.allowedToMove = True
         self.socket = socket
+        self.socket.send('g'.encode())
+        self.last_dir = 'g'
+        self.socket.send('h'.encode())
         self.map = map
+        self.dir = 0
+        self.pos = (0,0)
+        self.passengers = []
+        self.cellsToVisit = [] #List of cells to visit
 
-    def position(self):
-        return self.map.cars_positions_dict.get(self.id)
-
-    def setTarget(self, x:int, y:int):
+    def set_goal(self,goal):
+        self.goal = goal
+    def position(self, pos):
+        self.pos = pos
+    def direction(self, dir):
+        self.dir = dir
+    def setTarget(self, x,y):
         self.target = (x,y)
-        () #TODO: Finish dijkstra
+        #TODO: Finish dijkstra
 
     #Drive methods
     def stopDrive(self):
-        self.isMoving=False
-
+        self.allowedToMove=False
+        if self.isMoving:
+            self.socket.send('h'.encode())
+            self.isMoving = False
     def continueDrive(self):
-        self.isMoving=True
+        self.allowedToMove=True
 
+
+    def drive(self):
+        if self.allowedToMove:
+            if not self.isMoving:
+                self.socket.send('d'.encode())
+                self.isMoving = True
+            # print(self.goal, self.pos)
+            goal_vector = sub(self.goal,self.pos)
+            # current_vector = self.dir
+            car_angle = self.dir
+            print(car_angle)
+            goal_angle = 360-angle(goal_vector[0],goal_vector[1])
+            direction = dir(car_angle,goal_angle,0)
+            # print(direction)
+            if True:
+                # self.last_dir = direction
+                self.socket.send(direction.encode())
+        else:
+            if self.isMoving:
+                self.socket.send('h'.encode())
+                self.isMoving = False
+        
     #Updates the car's driving angle and moves the car 
     #TODO Alexander
     #def update():
@@ -48,14 +86,15 @@ class Car:
     #        adjust_angle()   
     #    pass
     
-    def add_passenger_destination(self, newPassenger):
+    def add_passenger_destination(self, newPassenger: Passenger, path):
         """
         Adds the given passenger to the car's list of passengers.
         Appends the shortest path from the last passenger to the newly added passenger to the car's cellsToVisit
         """
         self.passengers.append(newPassenger)
-        self.cellsToVisit.append(map.Map.shortestPath(self.map, self.lastPassenger.start, newPassenger.goal))
-        self.cellsToVisit.append(map.Map.shortest_path_recur(self.map, newPassenger.start, newPassenger.goal))
+        print(type(path))
+        print(type(self.cellsToVisit))
+        self.cellsToVisit += path
     
     def lastPassenger(self):
         """

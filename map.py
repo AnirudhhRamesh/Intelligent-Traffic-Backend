@@ -15,13 +15,6 @@ class Map:
 
     passengers = []
 
-    #List of all the cars and their positions
-    cars_positions_dict = {
-        "Car1 id" : (23, 43),
-        "Car2 id" : (12, 46)
-    }
-
-
     def __init__(self, filename) -> None:
         #Parse the file and generate the map
         self.filename = filename
@@ -29,6 +22,11 @@ class Map:
         self.map = self.parseFile(filename)
         self.max_x = len(self.map)
         self.max_y = len(self.map[0])
+        #List of all the cars and their positions
+        # self.cars_positions_dict = {
+        #     "Car1 id" : (0, 0),
+        #     "Car2 id" : (16, 16)
+        # }
         
         #################
         self.printMap()
@@ -36,9 +34,9 @@ class Map:
         
         
         # self.cars = {
-        #      "Car1 id" : car.Car("Car1 id", "car1 hardware socket", self.map),
-        #      "Car2 id" : car.Car("Car2 id", "socket", self.map)
-        # }
+        #     "Car1 id" : car.Car("Car1 id", "car1 hardware socket", self),
+        #     "Car2 id" : car.Car("Car2 id", "socket", self)
+        #  }
         
     
 
@@ -114,12 +112,11 @@ class Map:
                 else:                       
                     for dir in directions:
                         dirString += Direction.toString(dir)
-                    match length:
-                        case 1:
+                        if length == 1:
                             dirString = " " + dirString + "  "
-                        case 2:
+                        elif length == 2:
                             dirString = " " + dirString + " "
-                        case 3:
+                        elif length == 3:
                             dirString += " "
                 d.append(dirString)
             array.append(d)
@@ -136,8 +133,9 @@ class Map:
         """
         Add a passenger to a specific map cell and assign the passenger to a car
         """
-        self.passengers.append(passenger)
         self.assign_passenger(passenger)
+        self.passengers.append(passenger)
+
 
     # TODO Damian
     def shortestPath(self, startCell, goalCell):
@@ -153,45 +151,44 @@ class Map:
 
             for direction in cell.directions:
                 newCell = None
-                match direction:
-                    case Direction.UP:
-                        if predecessors[cell.x][min(cell.y + 1, self.max_y - 1)] is None:
-                            newCell = self.map[cell.x][cell.y + 1]
-                            predecessors[newCell.x][newCell.y] = cell
-                            queue.put(newCell)
-                            if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
-                                break
+                if direction == Direction.UP:
+                    if predecessors[cell.x][min(cell.y + 1, self.max_y - 1)] is None:
+                        newCell = self.map[cell.x][cell.y + 1]
+                        predecessors[newCell.x][newCell.y] = cell
+                        queue.put(newCell)
+                        if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
+                            break
 
-                    case Direction.DOWN:
-                        if predecessors[cell.x][max(0, cell.y - 1)] is None:
-                            newCell = self.map[cell.x][cell.y - 1]
-                            predecessors[newCell.x][newCell.y] = cell
-                            queue.put(newCell)
-                            if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
-                                break
+                elif direction == Direction.DOWN:
+                    if predecessors[cell.x][max(0, cell.y - 1)] is None:
+                        newCell = self.map[cell.x][cell.y - 1]
+                        predecessors[newCell.x][newCell.y] = cell
+                        queue.put(newCell)
+                        if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
+                            break
                     
-                    case Direction.RIGHT:
-                        if predecessors[min(cell.x + 1, self.max_x - 1)][cell.y] is None:
-                            newCell = self.map[cell.x + 1][cell.y]
-                            predecessors[newCell.x][newCell.y] = cell
-                            queue.put(newCell)
-                            if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
-                                break
+                if direction == Direction.RIGHT:
+                    if predecessors[min(cell.x + 1, self.max_x - 1)][cell.y] is None:
+                        newCell = self.map[cell.x + 1][cell.y]
+                        predecessors[newCell.x][newCell.y] = cell
+                        queue.put(newCell)
+                        if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
+                            break
 
-                    case Direction.LEFT:
-                        if predecessors[max(0, cell.x - 1)][cell.y] is None:
-                            newCell = self.map[cell.x - 1][cell.y]
-                            predecessors[newCell.x][newCell.y] = cell
-                            queue.put(newCell)
-                            if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
-                                break
+                if direction == Direction.LEFT:
+                    if predecessors[max(0, cell.x - 1)][cell.y] is None:
+                        newCell = self.map[cell.x - 1][cell.y]
+                        predecessors[newCell.x][newCell.y] = cell
+                        queue.put(newCell)
+                        if (goalCell.x == newCell.x) and (goalCell.y == newCell.y):
+                            break
+        print(predecessors)
         if(predecessors[goalCell.x][goalCell.y] is None):
             print("no path found........")
         
         print("goal pred", predecessors[goalCell.x][goalCell.y])
         current = goalCell
         cellsToVisit = []
-        print(predecessors)
         while current != startCell:
             cellsToVisit.append(current)
             current = predecessors[current.x][current.y]
@@ -200,12 +197,11 @@ class Map:
         print("-------------------------------------")
         print(cellsToVisit)
         cellsToVisit.reverse()
-        path = np.array(cellsToVisit)
-        for cell in path:
+        for cell in cellsToVisit:
             print("(", cell.x, cell.y, ")")
         # print(path)
         print("")
-        return path
+        return cellsToVisit
 
     def getCell(self, x, y):
         return self.map[x][y]
@@ -215,8 +211,9 @@ class Map:
         """
         Assigns a newly generated passenger to the car whose last destination is closest to the passenger cell
         """
-        shortestPath = 10000
+        shortestPathLength = 10000
         shortestPathCar = Any
+        shortestPath = []
 
         #TODO Alexander
         #for car in cars:
@@ -227,18 +224,21 @@ class Map:
 
         #Find the car with the shortest path to the next passenger
         for (carId, car) in self.cars.items():
-            print(f"Map type: {type(self.map)}")
-            newPath = len(self.shortestPath(car.lastPassenger.goal, passenger.start))
-            if shortestPath > newPath:
-                shortestPath = newPath
+            if not car.passengers:
+                newPath = self.shortestPath(self.getCell(car.position()[0], car.position()[1]), passenger.start)
                 shortestPathCar = car
-
-        shortestPathCar.add_passenger_destination(passenger)
+            else:
+                newPath = self.shortestPath(car.passengers[-1].goal, passenger.start)
+            if shortestPathLength > len(newPath):
+                shortestPath = newPath
+                shortestPathLength = len(newPath)
+                shortestPathCar = car
+        shortestPathCar.add_passenger_destination(passenger, shortestPath)
     
     def initSingleSource(G, s):
         #Init-single-source(G, s): -> G, s
 
         pass
 
-testMap = Map("map.csv")
-testMap.shortestPath(testMap.map[10][4], testMap.map[12][0])
+#testMap = Map("map2.csv")
+#testMap.shortestPath(testMap.map[10][4], testMap.map[12][0])
