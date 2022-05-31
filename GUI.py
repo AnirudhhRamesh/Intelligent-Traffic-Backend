@@ -73,8 +73,10 @@ class GUI:
                         grid[column][row] = 1
                         finalCell = self.map.getCell(randint(0, len(self.map.map)-1), randint(0,len(self.map.map[0])-1))
                         while not finalCell.isRoad :
-                            finalCell = self.map.getCell(randint(0, len(self.map.map)-1), randint(0,len(self.map.map[0])-1)) 
-                        self.map.add_passenger(Passenger(self.map.getCell(column, row), finalCell))
+                            finalCell = self.map.getCell(randint(0, len(self.map.map)-1), randint(0,len(self.map.map[0])-1))
+                        newPassenger =  Passenger(self.map.getCell(column, row), finalCell)
+                        self.map.map[column][row].passenger.append(newPassenger)
+                        self.map.add_passenger(newPassenger)
                         self.map.map[column][row].hasPassenger = True
                         
             #Draw the grid

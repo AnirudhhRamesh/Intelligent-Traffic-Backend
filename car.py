@@ -4,8 +4,10 @@
 from ast import Pass
 from re import S
 from traceback import print_tb
+from turtle import pos
 from car_commands import *
 import numpy
+from cell import Cell
 from passenger import Passenger
 
 
@@ -29,6 +31,7 @@ class Car:
         self.dir = 0
         self.pos = (0,0)
         self.passengers = []
+        self.currentPassenger: Passenger = None
         self.cellsToVisit = [] #List of cells to visit
 
     def set_goal(self,goal):
@@ -108,6 +111,19 @@ class Car:
         Returns the total cells the car has to visit
         """
         return len(self.passengers)
+    
+    def checkIfPassengerOnCells(self):
+        currentCell: Cell = self.map.getCell(self.pos[0], self.pos[1])
+        if(currentCell.hasPassenger() and currentCell.passenger in self.passengers):
+            self.currentPassenger = currentCell.passenger
+            currentCell.passenger.inCar = True
+            currentCell.passenger = None
+
+    def CheckIfOnDestination(self):
+        currentCell: Cell = self.map.getCell(self.pos[0], self.pos[1])
+        if(currentCell == self.currentPassenger.goal):
+            self.currentPassenger = None
+            
 
     
 #Car Attributes

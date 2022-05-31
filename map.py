@@ -13,8 +13,6 @@ import numpy as np
 #Map definition
 class Map:
 
-    passengers = []
-
     def __init__(self, filename) -> None:
         #Parse the file and generate the map
         self.filename = filename
@@ -129,12 +127,11 @@ class Map:
             
             
 
-    def add_passenger(self, passenger):
+    def add_passenger(self, passenger: Passenger):
         """
         Add a passenger to a specific map cell and assign the passenger to a car
         """
         self.assign_passenger(passenger)
-        self.passengers.append(passenger)
 
 
     # TODO Damian
@@ -233,6 +230,7 @@ class Map:
                 shortestPath = newPath
                 shortestPathLength = len(newPath)
                 shortestPathCar = car
+        shortestPathCar.passengers.append(passenger)
         shortestPathCar.add_passenger_destination(passenger, shortestPath)
     
     def initSingleSource(G, s):

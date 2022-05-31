@@ -11,6 +11,7 @@ from car import Car
 
 import socket
 import GUI
+import threading
 map_filename = "map2.csv"
 
 #cars = [(bluetooth_mac, socket, carid, car),()]
@@ -24,15 +25,10 @@ def main():
     camera = Camera([4, 18, 0,6], [9], 9, 16, goal_ids=[8])
     cars = init_cars(myMap, camera.tr)
     #initiate GUI
-    # gui = GUI.GUI(myMap)
-    # gui.launchGUI()
+    guiThread = threading.Thread(target = GUI.GUI(myMap).launchGUI(), args=(1, ), daemon = true)
     #Connect to the cars
     #init_cars()
     #april_tag_manager = april_tags()
-
-    #Add passenger (TODO Use gui/separate thread to listen for inputs)
-    # newPassenger = passenger.Passenger(myMap.getCell(0,0), myMap.getCell(0, 0))
-    # myMap.add_passenger(newPassenger)
 
     #TODO Alexander
     while True:
