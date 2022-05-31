@@ -16,7 +16,7 @@ class Car:
     def __init__(self, id, socket, map,tr):
         #FOR TESTING ONLY, REMOVE LATER
         self.goal_id = 8
-
+        self.sending = 0
         self.id = id
         self.tr = tr
         self.isMoving = False
@@ -64,8 +64,9 @@ class Car:
             goal_angle = 360-angle(goal_vector[0],goal_vector[1])
             direction = dir(car_angle,goal_angle,0)
             # print(direction)
-            if True:
-                # self.last_dir = direction
+            if self.last_dir != direction or self.sending % 5 == 0:
+                self.last_dir = direction
+                self.sending = (self.sending + 1) % 5
                 self.socket.send(direction.encode())
         else:
             if self.isMoving:
