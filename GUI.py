@@ -20,8 +20,13 @@ from passenger import Passenger
 class GUI:
     def __init__(self, map) -> None:
         self.map = map
+        self.grid = []
+        for row in range(len(map.map)):
+            self.grid.append([])
+            for column in range(len(map.map[0])):
+                self.grid[row].append(0)  
 
-    def launchGUI(self):
+    def update(self):
         pygame.init()
         # Assign FPS a value
         FPS = 30
@@ -52,45 +57,36 @@ class GUI:
         #draw grid
 
         #create array to select map cell
-        grid = []
-        for row in range(len(self.map.map)):
-            grid.append([])
-            for column in range(len(self.map.map[0])):
-                grid[row].append(0)  
-
-        #Game loop begins
-        while True:        
-            pygame.display.update()
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    pygame.quit()
-                    sys.exit()
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    pos = pygame.mouse.get_pos()
-                    column = int(pos[0] // (cell_width+margin))
-                    row = int(pos[1] // (cell_height+margin))
-                    if self.map.map[column][row].isRoad and not self.map.map[column][row].hasPassenger: 
-                        grid[column][row] = 1
-                        finalCell = self.map.getCell(randint(0, len(self.map.map)-1), randint(0,len(self.map.map[0])-1))
-                        while not finalCell.isRoad :
-                            finalCell = self.map.getCell(randint(0, len(self.map.map)-1), randint(0,len(self.map.map[0])-1)) 
-                        self.map.add_passenger(Passenger(self.map.getCell(column, row), finalCell))
-                        self.map.map[column][row].hasPassenger = True
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+                column = int(pos[0] // (cell_width+margin))
+                row = int(pos[1] // (cell_height+margin))
+                if self.map.map[column][row].isRoad and not self.map.map[column][row].hasPassenger: 
+                    self.grid[column][row] = 1
+                    finalCell = self.map.getCell(randint(0, len(self.map.map)-1), randint(0,len(self.map.map[0])-1))
+                    while not finalCell.isRoad :
+                        finalCell = self.map.getCell(randint(0, len(self.map.map)-1), randint(0,len(self.map.map[0])-1)) 
+                    self.map.add_passenger(Passenger(self.map.getCell(column, row), finalCell))
+                    self.map.map[column][row].hasPassenger = True
                         
-            #Draw the grid
-            for row in range(len(grid[0])):
-                for column in range(len(grid)):
-                    color = BLACK
-                    if self.map.map[column][row].isRoad and not self.map.map[column][row].hasPassenger:
-                        color = WHITE
-                    # else:
-                    #     color = BLACK
-                    if grid[column][row] == 1:
-                        color = GREEN
-                    pygame.draw.rect(DISPLAYSURF, 
-                                     color, 
-                                     [(margin+cell_width)*column+margin,
-                                     (margin+cell_height)*row+margin, cell_width, cell_height])  
-            FramePerSec.tick(FPS)
-
+        #Draw the grid
+        for row in range(len(self.grid[0])):
+            for column in range(len(self.grid)):
+                color = BLACK
+                if self.map.map[column][row].isRoad and not self.map.map[column][row].hasPassenger:
+                    color = WHITE
+                # else:
+                #     color = BLACK
+                if self.grid[column][row] == 1:
+                    color = GREEN
+                pygame.draw.rect(DISPLAYSURF, 
+                                 color, 
+                                 [(margin+cell_width)*column+margin,
+                                 (margin+cell_height)*row+margin, cell_width, cell_height])  
+        FramePerSec.tick(FPS)
     pass
