@@ -12,7 +12,7 @@ from car import Car
 import socket
 import GUI
 import threading
-map_filename = "map3.csv"
+map_filename = "map5.csv"
 
 #cars = [(bluetooth_mac, socket, carid, car),()]
 
@@ -22,7 +22,7 @@ def main():
     #Parse the map
     myMap = Map(map_filename)
     myMap.printMap()
-    camera = Camera([4, 18, 0,6], [9], myMap.max_y, myMap.max_x, myMap, goal_ids=[8])
+    camera = Camera([4, 18, 0,6], [9, 8], myMap.max_y, myMap.max_x, myMap, goal_ids=[8])
     #cars = init_cars(myMap, camera.tr)
     #initiate GUI
     # gui = GUI.GUI(myMap)
@@ -33,7 +33,10 @@ def main():
     camera.update() #get car positions from camera and update global map 
     cars[0].position(camera.get_pos(cars[0].id))
     cars[0].direction(camera.get_dir(cars[0].id))
-    cars[0].set_path(myMap.shortestPath(cars[0].get_pos(), (1,7))[1:])
+    cars[0].set_path(myMap.shortestPath(cars[0].get_pos(), (1,1))[1:])
+    cars[1].position(camera.get_pos(cars[1].id))
+    cars[1].direction(camera.get_dir(cars[1].id))
+    cars[1].set_path(myMap.shortestPath(cars[1].get_pos(), (7,7))[1:])
     #TODO Alexander
     while True:
         # gui.update()
@@ -58,7 +61,7 @@ def main():
         car.stopDrive()
 
 #Initialize the car connections
-def init_cars(map, tr,cars=[(9, '00:21:09:01:1e:fa')]):
+def init_cars(map, tr,cars=[(9, '00:21:09:01:1e:fa'), (8, '00:21:11:02:00:0a')]):
     car_list = []
     for car in cars:
         adapter_addr = car[1]
