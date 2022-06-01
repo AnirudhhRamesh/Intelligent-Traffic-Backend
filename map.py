@@ -148,8 +148,10 @@ class Map:
 
         while not queue.empty():
             cell = queue.get()
-
-            for direction in cell.directions:
+            directions = cell.directions
+            if not cell.isRoad:
+                directions = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
+            for direction in directions:
                 newCell = None
                 if direction == Direction.UP:
                     if predecessors[cell.x][min(cell.y + 1, self.max_y - 1)] is None:

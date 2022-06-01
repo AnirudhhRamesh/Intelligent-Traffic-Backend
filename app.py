@@ -1,8 +1,9 @@
 #App.py
 
 from sqlite3 import adapt
-
+import random
 import cv2
+from direction import Direction
 from  map import Map
 import cell
 import threading
@@ -22,7 +23,7 @@ def main():
     #Parse the map
     myMap = Map(map_filename)
     myMap.printMap()
-    camera = Camera([4, 18, 0,6], [9, 8], myMap.max_y, myMap.max_x, myMap, goal_ids=[8])
+    camera = Camera([4, 18, 0,6], [8], myMap.max_y, myMap.max_x, myMap, goal_ids=[8])
     #cars = init_cars(myMap, camera.tr)
     #initiate GUI
     # gui = GUI.GUI(myMap)
@@ -33,10 +34,8 @@ def main():
     camera.update() #get car positions from camera and update global map 
     cars[0].position(camera.get_pos(cars[0].id))
     cars[0].direction(camera.get_dir(cars[0].id))
-    cars[0].set_path(myMap.shortestPath(cars[0].get_pos(), (1,1))[1:])
-    cars[1].position(camera.get_pos(cars[1].id))
-    cars[1].direction(camera.get_dir(cars[1].id))
-    cars[1].set_path(myMap.shortestPath(cars[1].get_pos(), (7,7))[1:])
+    cars[0].set_path(myMap.shortestPath(cars[0].get_pos(), (7,7))[1:])
+  
     #TODO Alexander
     while True:
         # gui.update()
@@ -49,7 +48,18 @@ def main():
                 i = cell.x
                 j = cell.y
                 cv2.circle(camera.frame_in, (int(camera.tr.inverse(i,j)[0]),int(camera.tr.inverse(i,j)[1])),5,(0,0,255),1)
-
+        cars[0].position(camera.get_pos(cars[0].id))
+        cars[0].direction(camera.get_dir(cars[0].id))
+        if len(cars[0].path) == 0 or cars[0].path is None:
+            ng = (0,0)
+            while True:
+                x = random.randint(0, myMap.max_x-1)
+                y = random.randint(0, myMap.max_y-1)
+                ng = (x,y)
+                if(myMap.getCell(x,y).isRoad):
+                    break
+            cars[0].set_path(myMap.shortestPath(cars[0].get_pos(), ng))
+            cars[0].continueDrive()
         #  car.set_goal(camera.get_goal_pos(car.goal_id))
         for car in cars:
            car.drive()#find the next point in the path, and set the angle of the car to point there
@@ -61,7 +71,7 @@ def main():
         car.stopDrive()
 
 #Initialize the car connections
-def init_cars(map, tr,cars=[(9, '00:21:09:01:1e:fa'), (8, '00:21:11:02:00:0a')]):
+def init_cars(map, tr,cars=[(8, '00:21:11:02:00:0a')]):
     car_list = []
     for car in cars:
         adapter_addr = car[1]
