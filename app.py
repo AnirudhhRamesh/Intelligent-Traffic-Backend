@@ -3,7 +3,7 @@
 from sqlite3 import adapt
 
 import cv2
-import map
+from  map import Map
 import cell
 import threading
 from camera import Camera
@@ -12,7 +12,7 @@ from car import Car
 import socket
 import GUI
 import threading
-map_filename = "map2.csv"
+map_filename = "map5.csv"
 
 #cars = [(bluetooth_mac, socket, carid, car),()]
 
@@ -31,14 +31,28 @@ def main():
     gui.launchGUI()
     april_tag_manager = april_tags()
 
+    camera.update() #get car positions from camera and update global map 
+    cars[0].position(camera.get_pos(cars[0].id))
+    cars[0].direction(camera.get_dir(cars[0].id))
+    cars[0].set_path(myMap.shortestPath(cars[0].get_pos(), (1,1))[1:])
+    cars[1].position(camera.get_pos(cars[1].id))
+    cars[1].direction(camera.get_dir(cars[1].id))
+    cars[1].set_path(myMap.shortestPath(cars[1].get_pos(), (7,7))[1:])
+    
     #TODO Alexander
     while True:
-        gui.update()
+        # gui.update()
         camera.update() #get car positions from camera and update global map 
         for (id, car) in cars:
            car.position(camera.get_pos(car.id))
            car.direction(camera.get_dir(car.id))
-           car.set_goal(camera.get_goal_pos(car.goal_id))
+           print(car.local_goal)
+           for cell in car.path:
+                i = cell.x
+                j = cell.y
+                cv2.circle(camera.frame_in, (int(camera.tr.inverse(i,j)[0]),int(camera.tr.inverse(i,j)[1])),5,(0,0,255),1)
+
+        #  car.set_goal(camera.get_goal_pos(car.goal_id))
         for car in cars:
            car.drive()#find the next point in the path, and set the angle of the car to point there
         draw

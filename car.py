@@ -1,10 +1,12 @@
 #Car Model class
 
 #global positions dictionary
-from ast import Pass
-from re import S
+# from ast import Pass
+# from re import S
 from traceback import print_tb
-from turtle import pos
+# from turtle import pos
+
+# from torch import R
 from car_commands import *
 import numpy
 from cell import Cell
@@ -20,6 +22,7 @@ class Car:
         self.goal_id = 8
         self.sending = 0
         self.id = id
+        self.path = None
         self.tr = tr
         self.isMoving = False
         self.allowedToMove = True
@@ -28,19 +31,30 @@ class Car:
         self.last_dir = 'g'
         #self.socket.send('h'.encode())
         self.dir = 0
+        self.local_goal = None
         self.pos = (0,0)
         self.passengers = []
         self.currentPassenger: Passenger = None
         self.cellsToVisit = [] #List of cells to visit
 
-    def set_goal(self,goal):
-        self.goal = goal
+  
+    def set_path(self, path):
+        self.path = path
+        self.set_local_goal()
+    
+    def set_local_goal(self):
+        if not (self.path is None) and len(self.path) > 0:
+            self.local_goal = (self.path[0].x, self.path[0].y)
+        else: 
+            self.local_goal = None
+            self.stopDrive()
     def position(self, pos):
         self.pos = pos
     def direction(self, dir):
         self.dir = dir
-    def setTarget(self, x,y):
-        self.target = (x,y)
+    def get_pos(self):
+        return (int(self.pos[0]), int(self.pos[1]))
+    
         #TODO: Finish dijkstra
 
     #Drive methods
@@ -54,22 +68,22 @@ class Car:
 
 
     def drive(self):
+        if (not self.local_goal is None) and ((self.pos[0] - self.local_goal[0]) ** 2 + (self.pos[1] - self.local_goal[1])**2)**.5 < 1:
+            self.path.pop(0)
+            self.set_local_goal()
         if self.allowedToMove:
-            if not self.isMoving:
-                self.socket.send('d'.encode())
-                self.isMoving = True
-            # print(self.goal, self.pos)
-            goal_vector = sub(self.goal,self.pos)
-            # current_vector = self.dir
-            car_angle = self.dir
-            print(car_angle)
-            goal_angle = 360-angle(goal_vector[0],goal_vector[1])
-            direction = dir(car_angle,goal_angle,0)
-            # print(direction)
-            if self.last_dir != direction or self.sending % 5 == 0:
-                self.last_dir = direction
-                self.sending = (self.sending + 1) % 5
-                self.socket.send(direction.encode())
+            if not self.local_goal is None:
+                if not self.isMoving:
+                    self.socket.send('d'.encode())
+                    self.isMoving = True
+                goal_vector = sub(self.local_goal,self.pos)
+                car_angle = self.dir
+                goal_angle = 360-angle(goal_vector[0],goal_vector[1])
+                direction = dir(car_angle,goal_angle,0)
+                if self.last_dir != direction or self.sending % 5 == 0:
+                    self.last_dir = direction
+                    self.sending = (self.sending + 1) % 5
+                    self.socket.send(direction.encode())
         else:
             if self.isMoving:
                 self.socket.send('h'.encode())

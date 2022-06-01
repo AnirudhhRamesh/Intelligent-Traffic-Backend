@@ -132,6 +132,9 @@ class Map:
         """
         Returns a list of map cells to visit for the shortest path from the start position to the goal position
         """
+        startCell = self.getCell(startCell[0], startCell[1])
+        goalCell = self.getCell(goalCell[0], goalCell[1])
+
         queue = Queue(self.max_x*self.max_y)
         queue.put(startCell)
         predecessors =[[None for y in range(self.max_y)] for x in range(self.max_x)] 
