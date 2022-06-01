@@ -27,8 +27,8 @@ def main():
     #initiate GUI
     gui = GUI.GUI(myMap)
     #Connect to the cars
-    init_cars()
-    april_tag_manager = april_tags()
+    cars = init_cars(map, camera.tr)
+    # april_tag_manager = april_tags()
 
     #TODO Alexander
     while True:

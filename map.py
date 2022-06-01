@@ -204,6 +204,7 @@ class Map:
         return self.map[x][y]
 
 
+
     def assign_passenger(self, passenger) -> None:
         """
         Assigns a newly generated passenger to the car whose last destination is closest to the passenger cell
