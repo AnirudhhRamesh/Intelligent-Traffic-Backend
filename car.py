@@ -15,7 +15,7 @@ from passenger import Passenger
 class Car:
 
    #Init methods 
-    def __init__(self, id, socket, map,tr):
+    def __init__(self, id, socket,tr):
         #FOR TESTING ONLY, REMOVE LATER
         self.goal_id = 8
         self.sending = 0
@@ -24,10 +24,9 @@ class Car:
         self.isMoving = False
         self.allowedToMove = True
         self.socket = socket
-        self.socket.send('g'.encode())
+        #self.socket.send('g'.encode())
         self.last_dir = 'g'
-        self.socket.send('h'.encode())
-        self.map = map
+        #self.socket.send('h'.encode())
         self.dir = 0
         self.pos = (0,0)
         self.passengers = []
@@ -96,8 +95,6 @@ class Car:
         Appends the shortest path from the last passenger to the newly added passenger to the car's cellsToVisit
         """
         self.passengers.append(newPassenger)
-        print(type(path))
-        print(type(self.cellsToVisit))
         self.cellsToVisit += path
     
     def lastPassenger(self):
@@ -111,19 +108,6 @@ class Car:
         Returns the total cells the car has to visit
         """
         return len(self.passengers)
-    
-    def checkIfPassengerOnCells(self):
-        currentCell: Cell = self.map.getCell(self.pos[0], self.pos[1])
-        if(currentCell.hasPassenger() and currentCell.passenger in self.passengers):
-            self.currentPassenger = currentCell.passenger
-            currentCell.passenger.inCar = True
-            currentCell.passenger = None
-
-    def CheckIfOnDestination(self):
-        currentCell: Cell = self.map.getCell(self.pos[0], self.pos[1])
-        if(currentCell == self.currentPassenger.goal):
-            self.currentPassenger = None
-            
 
     
 #Car Attributes

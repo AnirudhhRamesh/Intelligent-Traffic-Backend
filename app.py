@@ -20,30 +20,35 @@ def main():
     print("Starting program...")
 
     #Parse the map
-    myMap = map.Map(map_filename)
-    myMap.printMap()
-    camera = Camera([4, 18, 0,6], [9], 9, 16, goal_ids=[8])
+    #camera = Camera([4, 18, 0,6], [9], 9, 16, goal_ids=[8])
     #cars = init_cars(myMap, camera.tr)
+    cars = {
+        "Car1 id" : Car("Car1 id", "car1 hardware socket", ""),
+        "Car2 id" : Car("Car2 id", "socket", "")
+    }
+    myMap = map.Map(map_filename, cars)
+    myMap.printMap()
+
+
     #initiate GUI
     gui = GUI.GUI(myMap)
-    #Connect to the cars
-    cars = init_cars(map, camera.tr)
+    gui.launchGUI()
     # april_tag_manager = april_tags()
 
     #TODO Alexander
     while True:
         gui.update()
-        camera.update() #get car positions from camera and update global map 
-        for car in cars:
-           car.position(camera.get_pos(car.id))
-           car.direction(camera.get_dir(car.id))
-           car.set_goal(camera.get_goal_pos(car.goal_id))
-        for car in cars:
-           car.drive()#find the next point in the path, and set the angle of the car to point there
+        #camera.update() #get car positions from camera and update global map 
+        #for (id, car) in cars:
+           #car.position(camera.get_pos(car.id))
+           #car.direction(camera.get_dir(car.id))
+           #car.set_goal(camera.get_goal_pos(car.goal_id))
+        #for car in cars:
+        #   car.drive()#find the next point in the path, and set the angle of the car to point there
         #draw
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-        cv2.imshow('camera', camera.frame_in)        
+        #if cv2.waitKey(1) & 0xFF == ord('q'):
+        #    break
+        #cv2.imshow('camera', camera.frame_in)        
     for car in cars:
         car.stopDrive()
 
@@ -56,7 +61,7 @@ def init_cars(map, tr,cars=[(9, '00:21:09:01:1e:fa')]):
         s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
         s.connect((adapter_addr, port))
         print(s)
-        newCar = Car(car[0], s, map, tr)
+        newCar = Car(car[0], s, tr)
         car_list.append(newCar)
     return car_list
 
