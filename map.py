@@ -13,28 +13,21 @@ import numpy as np
 #Map definition
 class Map:
 
-    def __init__(self, filename) -> None:
+    def __init__(self, filename, cars) -> None:
         #Parse the file and generate the map
         self.filename = filename
         #self.map = self.parseFile("map.txt")
         self.map = self.parseFile(filename)
         self.max_x = len(self.map)
         self.max_y = len(self.map[0])
-        #List of all the cars and their positions
-        # self.cars_positions_dict = {
-        #     "Car1 id" : (0, 0),
-        #     "Car2 id" : (16, 16)
-        # }
+
         
         #################
         self.printMap()
         #################
         
-        
-        # self.cars = {
-        #     "Car1 id" : car.Car("Car1 id", "car1 hardware socket", self),
-        #     "Car2 id" : car.Car("Car2 id", "socket", self)
-        #  }
+        self.cars = cars
+
         
     
 
@@ -228,7 +221,7 @@ class Map:
         #Find the car with the shortest path to the next passenger
         for (carId, car) in self.cars.items():
             if not car.passengers:
-                newPath = self.shortestPath(self.getCell(car.position()[0], car.position()[1]), passenger.start)
+                newPath = self.shortestPath(self.getCell(car.pos[0], car.pos[1]), passenger.start)
                 shortestPathCar = car
             else:
                 newPath = self.shortestPath(car.passengers[-1].goal, passenger.start)
@@ -243,6 +236,20 @@ class Map:
         #Init-single-source(G, s): -> G, s
 
         pass
+
+    def checkIfPassengerOnCells(self):
+        for car in self.cars:
+            currentCell: Cell = self.getCell(car.getCell(car.pos[0], car.pos[1]))
+            if(currentCell.hasPassenger() and currentCell.passenger in car.passengers):
+                self.currentPassenger = self.currentCell.passenger
+                self.currentCell.passenger.inCar = True
+                self.currentCell.passenger = None
+            
+
+    def CheckIfOnDestination(self):
+        for car in self.cars:
+            if(self.getCell(car.pos[0], car.pos[1]) == self.currentPassenger.goal):
+                car.currentPassenger = None
 
 #testMap = Map("map2.csv")
 #testMap.shortestPath(testMap.map[10][4], testMap.map[12][0])
