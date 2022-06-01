@@ -21,11 +21,11 @@ def main():
     print("Starting program...")
 
     #Parse the map
-    camera = Camera([4, 18, 0,6], [9], 9, 16, goal_ids=[8])
-    cars = init_cars(myMap, camera.tr)
-    myMap = map.Map(map_filename, cars)
+    myMap = Map(map_filename, None)
     myMap.printMap()
     camera = Camera([4, 18, 0,6], [8], myMap.max_y, myMap.max_x, myMap, goal_ids=[8])
+    cars = init_cars(camera.tr)
+
     #cars = init_cars(myMap, camera.tr)
     #initiate GUI
     # gui = GUI.GUI(myMap)
@@ -41,10 +41,9 @@ def main():
     while True:
         # gui.update()
         camera.update() #get car positions from camera and update global map 
-        for (id, car) in cars:
+        for (car) in cars:
            car.position(camera.get_pos(car.id))
            car.direction(camera.get_dir(car.id))
-           print(car.local_goal)
            for cell in car.path:
                 i = cell.x
                 j = cell.y
@@ -59,7 +58,7 @@ def main():
                 ng = (x,y)
                 if(myMap.getCell(x,y).isRoad):
                     break
-            cars[0].set_path(myMap.shortestPath(cars[0].get_pos(), ng))
+            cars[0].set_path(myMap.shortestPath(cars[0].last_goal, ng))
             cars[0].continueDrive()
         #  car.set_goal(camera.get_goal_pos(car.goal_id))
         for car in cars:
@@ -72,7 +71,7 @@ def main():
         car.stopDrive()
 
 #Initialize the car connections
-def init_cars(tr,cars=[(9, '00:21:09:01:1e:fa')]):
+def init_cars(tr,cars=[(8, '00:21:11:02:00:0a')]):
     car_list = []
     for car in cars:
         adapter_addr = car[1]

@@ -30,7 +30,7 @@ FPS = 30
 FramePerSec = pygame.time.Clock()
 margin = 1
 
-DISPLAYSURF = pygame.display.set_mode((MAX_X, MAX_Y))
+# DISPLAYSURF = pygame.display.set_mode((MAX_X, MAX_Y))
 
 #GUI description
 class GUI:

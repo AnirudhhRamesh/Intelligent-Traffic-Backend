@@ -36,15 +36,20 @@ class Car:
         self.passengers = []
         self.currentPassenger: Passenger = None
         self.cellsToVisit = [] #List of cells to visit
-
+        self.last_goal = self.pos
   
     def set_path(self, path):
         self.path = path
         self.set_local_goal()
+        
     
     def set_local_goal(self):
+
         if not (self.path is None) and len(self.path) > 0:
             self.local_goal = (self.path[0].x, self.path[0].y)
+            self.drive()
+            
+            self.last_goal = (self.path[len(self.path)-1].x,self.path[len(self.path)-1].y)
         else: 
             self.local_goal = None
             self.stopDrive()
@@ -61,6 +66,7 @@ class Car:
     def stopDrive(self):
         self.allowedToMove=False
         if self.isMoving:
+            print("stopping!")
             self.socket.send('h'.encode())
             self.isMoving = False
     def continueDrive(self):
@@ -73,7 +79,8 @@ class Car:
             self.set_local_goal()
         if self.allowedToMove:
             if not self.local_goal is None:
-                if not self.isMoving:
+                if not self.isMoving or self.sending % 5  == 0:
+                    print("driving", self.sending)
                     self.socket.send('d'.encode())
                     self.isMoving = True
                 goal_vector = sub(self.local_goal,self.pos)
@@ -86,6 +93,7 @@ class Car:
                     self.socket.send(direction.encode())
         else:
             if self.isMoving:
+                print("stop from that other place (line 96)")
                 self.socket.send('h'.encode())
                 self.isMoving = False
         
