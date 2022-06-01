@@ -20,16 +20,17 @@ def main():
     print("Starting program...")
 
     #Parse the map
-    myMap = Map(map_filename)
+    camera = Camera([4, 18, 0,6], [9], 9, 16, goal_ids=[8])
+    cars = init_cars(myMap, camera.tr)
+    myMap = map.Map(map_filename, cars)
     myMap.printMap()
-    camera = Camera([4, 18, 0,6], [9, 8], myMap.max_y, myMap.max_x, myMap, goal_ids=[8])
-    #cars = init_cars(myMap, camera.tr)
-    #initiate GUI
-    # gui = GUI.GUI(myMap)
-    #Connect to the cars
 
-    cars = init_cars(map, camera.tr)
-    # april_tag_manager = april_tags()
+
+    #initiate GUI
+    gui = GUI.GUI(myMap)
+    gui.launchGUI()
+    april_tag_manager = april_tags()
+
     camera.update() #get car positions from camera and update global map 
     cars[0].position(camera.get_pos(cars[0].id))
     cars[0].direction(camera.get_dir(cars[0].id))
@@ -37,11 +38,12 @@ def main():
     cars[1].position(camera.get_pos(cars[1].id))
     cars[1].direction(camera.get_dir(cars[1].id))
     cars[1].set_path(myMap.shortestPath(cars[1].get_pos(), (7,7))[1:])
+    
     #TODO Alexander
     while True:
         # gui.update()
         camera.update() #get car positions from camera and update global map 
-        for car in cars:
+        for (id, car) in cars:
            car.position(camera.get_pos(car.id))
            car.direction(camera.get_dir(car.id))
            print(car.local_goal)
@@ -53,7 +55,7 @@ def main():
         #  car.set_goal(camera.get_goal_pos(car.goal_id))
         for car in cars:
            car.drive()#find the next point in the path, and set the angle of the car to point there
-        #draw
+        draw
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
         cv2.imshow('camera', camera.frame_in)        
@@ -61,7 +63,7 @@ def main():
         car.stopDrive()
 
 #Initialize the car connections
-def init_cars(map, tr,cars=[(9, '00:21:09:01:1e:fa'), (8, '00:21:11:02:00:0a')]):
+def init_cars(tr,cars=[(9, '00:21:09:01:1e:fa')]):
     car_list = []
     for car in cars:
         adapter_addr = car[1]
@@ -69,7 +71,7 @@ def init_cars(map, tr,cars=[(9, '00:21:09:01:1e:fa'), (8, '00:21:11:02:00:0a')])
         s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
         s.connect((adapter_addr, port))
         print(s)
-        newCar = Car(car[0], s, map, tr)
+        newCar = Car(car[0], s, tr)
         car_list.append(newCar)
     return car_list
 
