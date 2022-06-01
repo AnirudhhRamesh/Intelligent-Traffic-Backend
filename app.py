@@ -5,7 +5,7 @@ from sqlite3 import adapt
 import cv2
 import map
 import cell
-import passenger
+import threading
 from camera import Camera
 from car import Car
 
@@ -24,8 +24,7 @@ def main():
     camera = Camera([4, 18, 0,6], [9], 9, 16, goal_ids=[8])
     cars = init_cars(myMap, camera.tr)
     #initiate GUI
-    # gui = GUI.GUI(myMap)
-    # gui.launchGUI()
+    gui = GUI.GUI(myMap)
     #Connect to the cars
     #init_cars()
     #april_tag_manager = april_tags()
@@ -36,6 +35,7 @@ def main():
 
     #TODO Alexander
     while True:
+        gui.update()
         camera.update() #get car positions from camera and update global map 
         for car in cars:
            car.position(camera.get_pos(car.id))
