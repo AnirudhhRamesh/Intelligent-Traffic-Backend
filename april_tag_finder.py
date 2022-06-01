@@ -60,7 +60,7 @@ class FileVideoStream:
     def startStream(self):
         print("start!\n")
 
-        cap = cv2.VideoCapture(0) 
+        cap = cv2.VideoCapture(0, cv2.CAP_DSHOW) 
         # cap =  videostream.VideoStream(src='http://192.168.137.79:8080/video', framerate=24, resolution=(1920,1260)).start()
         Time.sleep(1)
         at_detector = Detector(families='tag36h11',
@@ -73,7 +73,7 @@ class FileVideoStream:
 
 
         print("starting stream!")
-        corner_ids = [4,9,0,6]# [4,18,0,6]
+        corner_ids = [4,18,0,6]# [4,18,0,6]
         tr = Translator(corner_ids[0], corner_ids[1], corner_ids[2],corner_ids[3], self.map.max_x, self.map.max_y,at_detector)
 
         #map2d = Map.parseFile("map.txt")
