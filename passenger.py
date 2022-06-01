@@ -9,7 +9,7 @@ class Passenger:
     goal: Goal cell where passenger wishes to be dropped off
     taken: Set as true if the passenger is in a car
     """
-    def __init__(self, start:cell.Cell, goal:cell.Cell):
+    def __init__(self, start, goal):
         self.start = start
         self.goal = goal
         self.inCar = False

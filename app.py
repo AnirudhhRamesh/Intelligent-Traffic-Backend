@@ -23,12 +23,12 @@ def main():
     myMap = map.Map(map_filename)
     myMap.printMap()
     camera = Camera([4, 18, 0,6], [9], 9, 16, goal_ids=[8])
-    cars = init_cars(myMap, camera.tr)
+    #cars = init_cars(myMap, camera.tr)
     #initiate GUI
     gui = GUI.GUI(myMap)
     #Connect to the cars
-    #init_cars()
-    #april_tag_manager = april_tags()
+    init_cars()
+    april_tag_manager = april_tags()
 
     #TODO Alexander
     while True:
