@@ -16,8 +16,8 @@ import GUI
 import threading
 map_filename = "map5.csv"
 car_list = [
-    (8,'00:21:11:01:FA:14'),
-(9, '00:21:11:01:FA:1C')
+    (9,'00:21:11:01:FA:14'),
+(8, '00:21:11:01:FA:1C')
 # (10, '00:21:09:01:1e:fa')
 #  '00:21:09:01:1e:fa'
 ]
@@ -49,7 +49,9 @@ def main():
     print("found all cars!")
     #at this point all cars should have their position updated
         
-
+    for car in cars:
+        car.position(camera.get_pos(car.id))
+        car.direction(camera.get_dir(car.id))
 
 
     #initiate GUI
@@ -58,19 +60,24 @@ def main():
 
    
     #TODO Alexander
-    while True:
-        # gui.update()
-        camera.update() #get car positions from camera and update global map 
-        dm.update(camera)
+    try:
+        while True:
+            # gui.update()
+            camera.update() #get car positions from camera and update global map 
+            dm.update(camera)
+            for car in cars:
+                car.drive() #find the next point in the path, and set the angle of the car to point there
+            # draw
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+            cv2.imshow('camera', camera.frame_in)      
+    except Exception as e:  
+       
+        print("-------ERROR-------")
+        print(e)
+    finally:
         for car in cars:
-           car.drive() #find the next point in the path, and set the angle of the car to point there
-        # draw
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-        cv2.imshow('camera', camera.frame_in)        
-    for car in cars:
-        car.stopDrive()
-
+            car.stopDrive()
 #Initialize the car connections
 def init_cars(cars):
     car_list = []

@@ -3,7 +3,7 @@ import random
 
 from cv2 import sqrt
 
-STOP_SIGN_DIST = 3
+STOP_SIGN_DIST = 1.85
 
 class DecisionMaker:
     def __init__(self,cars,map,camera):
@@ -33,58 +33,64 @@ class DecisionMaker:
                 j = cell.y
                 cv2.circle(camera.frame_in, (int(camera.tr.inverse(i,j)[0]),int(camera.tr.inverse(i,j)[1])),5,(0,0,255),1)
 
-        self.intersection(5,1,0)
-        self.intersection(1,5,1)
-        self.intersection(5,5,2)
-        self.intersection(9,5,3)
-        self.intersection(5,9,4)
+        self.intersection(6.5,3.5,0)
+        self.intersection(3.5,6.5,1)
+        self.intersection(3.5,3.5,2)
+        self.intersection(.5,3.5,3)
+        self.intersection(3.5,.5,4)
  
     def distance(self,x1,y1,x2,y2):
-        return sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))
+        return ((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))**.5
     
 
     def intersection(self,centerX,centerY,id):
-        cv2.circle(self.camera.frame_in, (int(self.camera.tr.inverse(centerX,centerY)[0]),int(self.camera.tr.inverse(centerX,centerY)[1])),30,(0,0,255),1)
+        radius = int((self.camera.tr.inverse(STOP_SIGN_DIST,STOP_SIGN_DIST)[0])*.25)
+        cv2.circle(self.camera.frame_in, (int(self.camera.tr.inverse(centerX,centerY)[0]),int(self.camera.tr.inverse(centerX,centerY)[1])),radius,(0,0,255),1)
+        
         for car in self.cars:
-            if(self.distance(car.pos[0], car.pos[1], centerX,centerY) < STOP_SIGN_DIST and not self.allowedToGo[id].includes(car)):
+            carInStop = False
+            for ls in self.allowedToGo:
+                if car in ls:
+                    carInStop = True
+            if(self.distance(car.pos[0], car.pos[1], centerX,centerY) < STOP_SIGN_DIST and not carInStop):
                 car.stopDrive()
-                if not self.queue[id].includes(car):
-                    self.queue[id].push(car)
+                if not car in self.queue[id]:
+                    self.queue[id].append(car)
                 
         #let car go if no one is intersection 
-        if self.queue[id].length > 0 :
-            if(self.allowedToGo[id].length == 0):
-                goCar = self.queue[id].shift()
-                self.allowedToGo[id].push(goCar)
+        if len(self.queue[id]) > 0 :
+            if(len(self.allowedToGo[id]) == 0):
+                goCar = self.queue[id].pop(0)
+                self.allowedToGo[id].append(goCar)
                 # goCar.continue()
                 goCar.continueDrive()
                 
             
         #let car go if it can go
-        if self.allowedToGo[id].length > 0 and self.queue[id].length > 0:
-            for i in range(min(2,self.queue[id].length)):
-                canGo = True
-                for j in range(self.allowedToGo[id].length):
-                    # console.log(self.queue[id][i], self.allowedToGo[id][j])
-                    if(self.queue[id][i].pathCrosses(self.allowedToGo[id][j],3)):
-                        # //console.log("------------------------------------------------")
-                        canGo = False
+        # if len(self.allowedToGo[id]) > 0 and len(self.queue[id]) > 0:
+        #     for i in range(min(2,len(self.queue[id]))):
+        #         canGo = False
+        #         # for j in range(len(self.allowedToGo[id])):
+        #         #     # console.log(self.queue[id][i], self.allowedToGo[id][j])
+        #         #     if(self.queue[id][i].pathCrosses(self.allowedToGo[id][j],3)):
+        #         #         # //console.log("------------------------------------------------")
+        #         #         canGo = False
                     
                     
                 
-            #    // console.log(canGo)
-                if(canGo):
-                    goCar = self.queue[id].shift()
-                    self.allowedToGo[id].push(goCar)
-                    # goCar.continue()
-                    goCar.continueDrive()
+        #     #    // console.log(canGo)
+        #         if(canGo):
+        #             goCar = self.queue[id].pop(0)
+        #             self.allowedToGo[id].append(goCar)
+        #             # goCar.continue()
+
+        #             goCar.continueDrive()
 
                 # //   console.log("can drive!!!!!!!!!!!!!!!! ",canGo)
                 # //   console.log(goCar)
             #    // console.log("hello")
         
-        # self.allowedToGo[id] =  self.allowedToGo[id].filter(lambda: car => dist(car.x, car.y,centerX, centerY) < STOP_SIGN_DIST)
-
-        for car in self.cars:
-            if self.distance(car.pos[0], car.pos[1],centerX, centerY) < STOP_SIGN_DIST:
-                self.allowedToGo[id] = car
+        self.allowedToGo[id] =  list(filter(lambda car: self.distance(car.pos[0], car.pos[1],centerX, centerY) < STOP_SIGN_DIST, self.allowedToGo[id]))
+        # for car in self.cars:
+        #     if self.distance(car.pos[0], car.pos[1],centerX, centerY) < STOP_SIGN_DIST:
+        #         self.allowedToGo[id] = car

@@ -31,7 +31,7 @@ class Car:
         #self.socket.send('h'.encode())
         self.dir = 0
         self.local_goal = None
-        self.pos = (0,0)
+        self.pos = None
         self.passengers = []
         self.currentPassenger: Passenger = None
         self.cellsToVisit = [] #List of cells to visit
@@ -46,14 +46,17 @@ class Car:
 
         if not (self.path is None) and len(self.path) > 0:
             self.local_goal = (self.path[0].x, self.path[0].y)
+            self.last_goal = (self.path[len(self.path)-1].x,self.path[len(self.path)-1].y)
+
             self.drive()
             
-            self.last_goal = (self.path[len(self.path)-1].x,self.path[len(self.path)-1].y)
         else: 
-            self.local_goal = None
+            self.local_goal = self.get_pos()
             self.stopDrive()
     def position(self, pos):
         self.pos = pos
+        if self.path is None:
+            self.last_goal = self.get_pos()
     def direction(self, dir):
         self.dir = dir
     def get_pos(self):
@@ -76,7 +79,8 @@ class Car:
         self.sending = (self.sending + 1) % 5
 
         if (not self.local_goal is None) and ((self.pos[0] - self.local_goal[0]) ** 2 + (self.pos[1] - self.local_goal[1])**2)**.5 < 1:
-            self.path.pop(0)
+            if len(self.path) > 0:
+                self.path.pop(0)
             self.set_local_goal()
         if self.allowedToMove:
             if not self.local_goal is None:
@@ -90,7 +94,6 @@ class Car:
                 direction = dir(car_angle,goal_angle,0)
                 if self.last_dir != direction or self.sending % 5 == 0:
                     self.last_dir = direction
-                    print("direction:", direction, self.sending)
                     self.socket.send(direction.encode())
         else:
             if self.isMoving:
