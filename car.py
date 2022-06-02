@@ -68,7 +68,7 @@ class Car:
     def stopDrive(self):
         self.allowedToMove=False
         if self.isMoving:
-            print("stopping!")
+            # print("stopping!")
             self.socket.send('h'.encode())
             self.isMoving = False
     def continueDrive(self):

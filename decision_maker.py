@@ -3,7 +3,7 @@ import random
 
 from cv2 import sqrt
 
-STOP_SIGN_DIST = 1.85
+STOP_SIGN_DIST = 1
 
 class DecisionMaker:
     def __init__(self,cars,map,camera):
@@ -44,6 +44,7 @@ class DecisionMaker:
     
 
     def intersection(self,centerX,centerY,id):
+        # print(self.queue[id])
         radius = int((self.camera.tr.inverse(STOP_SIGN_DIST,STOP_SIGN_DIST)[0])*.25)
         cv2.circle(self.camera.frame_in, (int(self.camera.tr.inverse(centerX,centerY)[0]),int(self.camera.tr.inverse(centerX,centerY)[1])),radius,(0,0,255),1)
         
@@ -52,7 +53,7 @@ class DecisionMaker:
             for ls in self.allowedToGo:
                 if car in ls:
                     carInStop = True
-            if(self.distance(car.pos[0], car.pos[1], centerX,centerY) < STOP_SIGN_DIST and not carInStop):
+            if(self.distance(car.local_goal[0], car.local_goal[1], centerX,centerY) < STOP_SIGN_DIST and (not carInStop) and (not car in self.allowedToGo[id]) ):
                 car.stopDrive()
                 if not car in self.queue[id]:
                     self.queue[id].append(car)
