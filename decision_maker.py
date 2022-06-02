@@ -53,6 +53,7 @@ class DecisionMaker:
             for ls in self.allowedToGo:
                 if car in ls:
                     carInStop = True
+            # print(self.allowedToGo[id])
             if(self.distance(car.local_goal[0], car.local_goal[1], centerX,centerY) < STOP_SIGN_DIST and (not carInStop) and (not car in self.allowedToGo[id]) ):
                 car.stopDrive()
                 if not car in self.queue[id]:
@@ -91,7 +92,7 @@ class DecisionMaker:
                 # //   console.log(goCar)
             #    // console.log("hello")
         
-        self.allowedToGo[id] =  list(filter(lambda car: self.distance(car.pos[0], car.pos[1],centerX, centerY) < STOP_SIGN_DIST, self.allowedToGo[id]))
+        self.allowedToGo[id] =  list(filter(lambda car: self.distance(car.local_goal[0], car.local_goal[1],centerX, centerY) < STOP_SIGN_DIST, self.allowedToGo[id]))
         # for car in self.cars:
         #     if self.distance(car.pos[0], car.pos[1],centerX, centerY) < STOP_SIGN_DIST:
         #         self.allowedToGo[id] = car
