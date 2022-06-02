@@ -18,29 +18,29 @@ def sub(x,y):
 def dir(car,goal,dist):
     # print(car, goal)
     angle = (car-goal+360) % 360
-    if angle > 350 or angle < 10:
+    if angle > 350 or angle <= 10:
         return 'g'
     #turn right
-    if (angle > 10 and angle < 30):
+    if (angle > 10 and angle <= 30):
         return turn(45)
-    if (angle > 30 and angle < 50):
+    if (angle > 30 and angle <= 50):
         return turn(60)
-    if (angle > 50 and angle < 70):
+    if (angle > 50 and angle <= 70):
         return turn(70)
-    if (angle > 70 and angle < 90):
+    if (angle > 70 and angle <= 90):
         return turn(80)
-    if (angle > 90 and angle < 180):
+    if (angle > 90 and angle <= 180):
         return turn(90)
     #turn left
-    if (angle > 330 and angle < 350):
+    if (angle > 330 and angle <= 350):
         return turn(-45)
-    if (angle > 310 and angle < 330):
+    if (angle > 310 and angle <= 330):
         return turn(-60)
-    if (angle > 290 and angle < 310):
+    if (angle > 290 and angle <= 310):
         return turn(-70)
-    if (angle > 270 and angle < 290):
+    if (angle > 270 and angle <= 290):
         return turn(-80)
-    if (angle > 180 and angle < 270):
+    if (angle > 180 and angle <= 270):
         return turn(-90)
     return 'g'
 

@@ -19,9 +19,9 @@ class Camera:
         self.goals = {}
         self.goal_pos = {}
         for id in goal_ids:
-            self.goals[id] = (0,0)
+            self.goals[id] = None
         for id in car_ids:
-            self.pos[id] = (0,0)
+            self.pos[id] = None
             self.dirs[id] = 0
         self.at_detector =  Detector(families='tag36h11',
                        nthreads=1,
@@ -38,7 +38,7 @@ class Camera:
         tags = self.at_detector.detect(grey)
         self.tr.setCoords(tags)
         if self.tr.foundCorners():
-            sideLength_x = abs(self.tr.id2Coords[0] - self.tr.id1Coords[0])
+            sideLength_x = abs((self.tr.id2Coords[0]-40) - self.tr.id1Coords[0])
             sideLength_y = abs(self.tr.id4Coords[1] - self.tr.id1Coords[1])
             max_xi = len(self.myMap)
             max_yi = len(self.myMap[0])

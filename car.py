@@ -17,13 +17,12 @@ from passenger import Passenger
 class Car:
 
    #Init methods 
-    def __init__(self, id, socket,tr):
+    def __init__(self, id, socket):
         #FOR TESTING ONLY, REMOVE LATER
         self.goal_id = 8
         self.sending = 0
         self.id = id
         self.path = None
-        self.tr = tr
         self.isMoving = False
         self.allowedToMove = True
         self.socket = socket
@@ -74,13 +73,15 @@ class Car:
 
 
     def drive(self):
+        self.sending = (self.sending + 1) % 5
+
         if (not self.local_goal is None) and ((self.pos[0] - self.local_goal[0]) ** 2 + (self.pos[1] - self.local_goal[1])**2)**.5 < 1:
             self.path.pop(0)
             self.set_local_goal()
         if self.allowedToMove:
             if not self.local_goal is None:
                 if not self.isMoving or self.sending % 5  == 0:
-                    print("driving", self.sending)
+                    # print("driving", self.sending)
                     self.socket.send('d'.encode())
                     self.isMoving = True
                 goal_vector = sub(self.local_goal,self.pos)
@@ -89,7 +90,7 @@ class Car:
                 direction = dir(car_angle,goal_angle,0)
                 if self.last_dir != direction or self.sending % 5 == 0:
                     self.last_dir = direction
-                    self.sending = (self.sending + 1) % 5
+                    print("direction:", direction, self.sending)
                     self.socket.send(direction.encode())
         else:
             if self.isMoving:

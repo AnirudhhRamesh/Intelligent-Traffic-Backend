@@ -23,7 +23,7 @@ class Map:
 
         
         #################
-        self.printMap()
+        # self.printMap()
         #################
         
         self.cars = cars
