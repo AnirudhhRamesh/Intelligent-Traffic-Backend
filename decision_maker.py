@@ -3,7 +3,7 @@ import random
 
 from cv2 import sqrt
 
-STOP_SIGN_DIST = 1
+STOP_SIGN_DIST = 1.4
 
 class DecisionMaker:
     def __init__(self,cars,map,camera):
@@ -31,13 +31,16 @@ class DecisionMaker:
             for cell in car.path:
                 i = cell.x
                 j = cell.y
-                cv2.circle(camera.frame_in, (int(camera.tr.inverse(i,j)[0]),int(camera.tr.inverse(i,j)[1])),5,(0,0,255),1)
+                cv2.circle(camera.frame_in, (int(camera.tr.inverse(i,j)[0]),int(camera.tr.inverse(i,j)[1])),car.id,car.color,1)
 
-        self.intersection(6.5,3.5,0)
-        self.intersection(3.5,6.5,1)
-        self.intersection(3.5,3.5,2)
-        self.intersection(.5,3.5,3)
-        self.intersection(3.5,.5,4)
+        # self.intersection(6.5,3.5,0)
+        # self.intersection(3.5,6.5,1)
+        # self.intersection(3.5,3.5,2)
+        # self.intersection(2.5,2.5,2)
+        # self.intersection(.5,3.5,3)
+        # self.intersection(3.5,.5,4)
+        for i in range(len(self.myMap.intersections)):
+            self.intersection(self.myMap.intersections[i][0], self.myMap.intersections[i][1], i)
  
     def distance(self,x1,y1,x2,y2):
         return ((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))**.5

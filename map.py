@@ -17,7 +17,7 @@ class Map:
         #Parse the file and generate the map
         self.filename = filename
         #self.map = self.parseFile("map.txt")
-        self.map = self.parseFile(filename)
+        self.map, self.intersections = self.parseFile(filename)
         self.max_x = len(self.map)
         self.max_y = len(self.map[0])
 
@@ -46,19 +46,21 @@ class Map:
 
         #2D array of all the cells
         newMap = []
-
+        intersections = []
         with open(filename, 'r', encoding='utf-8-sig') as f:
             lines = f.readlines()
 
             x = 0
             y = 0
             
-            max_y = len(lines)
+            max_y = len(lines)-1
             max_x = len(lines[0].split(','))
             
             lines.reverse()
             newMap = [[None for y in range(max_y)] for x in range(max_x)] 
-            for line in lines:
+            for i in range(1, len(lines)):
+            
+                line = lines[i]
                 cells = line.split(',')
                 
                 
@@ -80,10 +82,15 @@ class Map:
                 # newMap.append(newMapRow)
                 y += 1
                 x = 0
+            intersections = lines[0].split(",")
+            for i in range(len(intersections)):
+                vals = intersections[i].split(" ") 
+                intersections[i] =  (float(vals[0]),float(vals[1]))
+            
             f.close()
 
             m = np.array(newMap)
-        return m
+        return (m,intersections)
 
 
     # #Convert text file to 2D enum array: x, y, true or false, UP/RIGHT/DOWN/LEFT

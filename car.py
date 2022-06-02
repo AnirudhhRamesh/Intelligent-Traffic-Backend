@@ -17,10 +17,11 @@ from passenger import Passenger
 class Car:
 
    #Init methods 
-    def __init__(self, id, socket):
+    def __init__(self, id, socket,color):
         #FOR TESTING ONLY, REMOVE LATER
         self.goal_id = 8
         self.sending = 0
+        self.color = color
         self.id = id
         self.path = None
         self.isMoving = False
@@ -78,7 +79,7 @@ class Car:
     def drive(self):
         self.sending = (self.sending + 1) % 5
 
-        if (not self.local_goal is None) and ((self.pos[0] - self.local_goal[0]) ** 2 + (self.pos[1] - self.local_goal[1])**2)**.5 < 1:
+        if (not self.local_goal is None) and ((self.pos[0] - self.local_goal[0]) ** 2 + (self.pos[1] - self.local_goal[1])**2)**.5 < .75:
             if len(self.path) > 0:
                 self.path.pop(0)
             self.set_local_goal()

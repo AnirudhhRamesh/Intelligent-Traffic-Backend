@@ -10,14 +10,14 @@ import threading
 from decision_maker import DecisionMaker
 from camera import Camera
 from car import Car
-
+import traceback
 import socket
 import GUI
 import threading
 map_filename = "map5.csv"
 car_list = [
-    (9,'00:21:11:01:FA:14'),
-(8, '00:21:11:01:FA:1C')
+    (9,'00:21:11:01:FA:14', (255,0,0)),
+(8, '00:21:11:01:FA:1C', (0,255,0))
 # (10, '00:21:09:01:1e:fa')
 #  '00:21:09:01:1e:fa'
 ]
@@ -43,7 +43,7 @@ def main():
     while not foundAllCars:
         foundAllCars = True
         camera.update()
-        for (id,mac) in car_list:
+        for (id,mac,color) in car_list:
             if camera.get_pos(id) is None:
                 foundAllCars = False
     print("found all cars!")
@@ -72,12 +72,14 @@ def main():
                 break
             cv2.imshow('camera', camera.frame_in)      
     except Exception as e:  
-       
+        tb = traceback.format_exc()
         print("-------ERROR-------")
         print(e)
+        print(tb)
     finally:
-        for car in cars:
-            car.stopDrive()
+        for i in range(10):
+            for car in cars:
+                car.stopDrive()
 #Initialize the car connections
 def init_cars(cars):
     car_list = []
@@ -86,8 +88,8 @@ def init_cars(cars):
         port = 1
         s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
         s.connect((adapter_addr, port))
-        print(s)
-        newCar = Car(car[0], s)
+        # print(s)
+        newCar = Car(car[0], s, car[2])
         car_list.append(newCar)
     return car_list
 
