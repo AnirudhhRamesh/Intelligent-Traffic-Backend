@@ -13,6 +13,25 @@ class DecisionMaker:
         self.allowedToGo = [[],[],[],[],[]]
         self.camera = camera
 
+
+
+    def isCurveOrIntersection(self, x, y): # doesn't check the single cell that is in the intersection with only one direction...
+        if (
+            len(self.myMap.map[x][y].directions) > 1 or
+            self.myMap.map[x][y].x == 0 and self.myMap.map[x][y].y == 0 or 
+            self.myMap.map[x][y].x == 0 and self.myMap.map[x][y].y == self.myMap.max_y-1 or 
+            self.myMap.map[x][y].x == self.myMap.max_x-1 and self.myMap.map[x][y].y == 0 or 
+            self.myMap.map[x][y].x == self.myMap.max_x-1 and self.myMap.map[x][y].y == self.myMap.max_y-1 or
+            
+            self.myMap.map[x][y].x == 1 and self.myMap.map[x][y].y == 1 or 
+            self.myMap.map[x][y].x == 1 and self.myMap.map[x][y].y == self.myMap.max_y-2 or 
+            self.myMap.map[x][y].x == self.myMap.max_x-2 and self.myMap.map[x][y].y == 1 or 
+            self.myMap.map[x][y].x == self.myMap.max_x-2 and self.myMap.map[x][y].y == self.myMap.max_y-2
+            ):
+            return True
+        else:
+            return False
+    
     def update(self, camera):
         self.camera = camera
         for car in self.cars:
@@ -21,10 +40,10 @@ class DecisionMaker:
             if car.path is None or len(car.path) == 0:
                 ng = (0,0)
                 while True:
-                    x = random.randint(0, self.myMap.max_x-1)
+                    x = random.randint(0, self.myMap.max_x-1) # add check so that it is not a corner / intersection
                     y = random.randint(0, self.myMap.max_y-1)
                     ng = (x,y)
-                    if(self.myMap.getCell(x,y).isRoad):
+                    if(self.myMap.getCell(x,y).isRoad and not self.isCurveOrIntersection(x, y)):
                         break
                 car.set_path(self.myMap.shortestPath(car.last_goal, ng))
                 car.continueDrive()

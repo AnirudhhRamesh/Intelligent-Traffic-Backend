@@ -13,7 +13,7 @@ from cell import Cell
 from passenger import Passenger
 
 
-CURVE_TRANSLATION = 0.2
+CURVE_TRANSLATION = 0.25
 
 class Car:
 
@@ -61,6 +61,14 @@ class Car:
             (x1, y1) = (path[i].x, path[i].y)
             (x2, y2) = (path[i+1].x, path[i+1].y)
             
+            #check for double curve:
+            if i < len(path) - 2:
+                (x3, y3) = (path[i+2].x, path[i+2].y)
+                if x0 == x1 and y1 == y2 and (x3 == x0 or y3 == y0):
+                    return (0,0)
+                elif y0 == y1 and x1 == x2 and (x3 == x0 or y3 == y0):
+                    return (0,0)
+            
             # up (left/right) / down(left/right)
             if x0 == x1 and y1 == y2:
                 if y0 < y1: #up:
@@ -88,6 +96,8 @@ class Car:
                         return (CURVE_TRANSLATION, -CURVE_TRANSLATION)
             else:
                 return (0,0)
+        else:
+            return (0,0)
                 
             
             
