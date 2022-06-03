@@ -2,7 +2,7 @@
 
 from sqlite3 import adapt
 import cv2
-from scipy.fft import idct
+# from scipy.fft import idct
 from direction import Direction
 from  map import Map
 import cell
@@ -16,7 +16,7 @@ import GUI
 import threading
 map_filename = "map5.csv"
 car_list = [
-    (9,'00:21:11:01:FA:14', (255,0,0)),
+   # (9,'00:21:11:01:FA:14', (255,0,0)),
 (8, '00:21:11:01:FA:1C', (0,255,0))
 # (10, '00:21:09:01:1e:fa')
 #  '00:21:09:01:1e:fa'

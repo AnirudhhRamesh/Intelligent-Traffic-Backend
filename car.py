@@ -13,6 +13,7 @@ from cell import Cell
 from passenger import Passenger
 
 
+CURVE_TRANSLATION = 0.2
 
 class Car:
 
@@ -37,17 +38,83 @@ class Car:
         self.currentPassenger: Passenger = None
         self.cellsToVisit = [] #List of cells to visit
         self.last_goal = self.pos
+        
+        # contains the translation for the coordinates (always zero, except in the curves...)
+        # self.translateCorners = self.computeTranslate()
+  
+  
+    def computeTranslate(self, path):
+        translations = []
+        translations.append((0,0))
+        for i in range(1, len(path)-1):
+            translations.append(self.curveTranslate(path, i))
+            
+        translations.append((0,0))
+        self.translations = translations
+            
+                
+        
+    def curveTranslate(self, path, i): #returns (x,y) translate (if not curve, (0,0))
+        
+        if 0 < i and i < len(path) - 1:
+            (x0, y0) = (path[i-1].x, path[i-1].y)
+            (x1, y1) = (path[i].x, path[i].y)
+            (x2, y2) = (path[i+1].x, path[i+1].y)
+            
+            # up (left/right) / down(left/right)
+            if x0 == x1 and y1 == y2:
+                if y0 < y1: #up:
+                    if x1 < x2: #right
+                        return (CURVE_TRANSLATION, -CURVE_TRANSLATION)
+                    else: # left
+                        return (-CURVE_TRANSLATION, -CURVE_TRANSLATION)
+                else: #down:
+                    if x1 < x2: #right
+                        return (CURVE_TRANSLATION, CURVE_TRANSLATION)
+                    else: # left
+                        return (-CURVE_TRANSLATION, CURVE_TRANSLATION)
+                
+            # left (up/down) / right (up/down)
+            elif y0 == y1 and x1 == x2:
+                if x0 < x1: #right:
+                    if y1 < y2: #up
+                        return (-CURVE_TRANSLATION, CURVE_TRANSLATION)
+                    else: # down
+                        return (-CURVE_TRANSLATION, -CURVE_TRANSLATION)
+                else: #left:
+                    if y1 < y2: #up
+                        return (CURVE_TRANSLATION, CURVE_TRANSLATION)
+                    else: # down
+                        return (CURVE_TRANSLATION, -CURVE_TRANSLATION)
+            else:
+                return (0,0)
+                
+            
+            
+            # check  transpose down & l/r
+            
+            # check  transpose up & l/r
+            
   
     def set_path(self, path):
         self.path = path
+        self.computeTranslate(path)
         self.set_local_goal()
         
     
     def set_local_goal(self):
 
         if not (self.path is None) and len(self.path) > 0:
-            self.local_goal = (self.path[0].x, self.path[0].y)
-            self.last_goal = (self.path[len(self.path)-1].x,self.path[len(self.path)-1].y)
+            print("translation", self.translations[len(self.translations)-1])
+            self.local_goal = (self.path[0].x + self.translations[0][0], self.path[0].y + self.translations[0][1]) 
+            self.last_goal = (self.path[len(self.path)-1].x + self.translations[len(self.translations)-1][0],self.path[len(self.path)-1].y + self.translations[len(self.translations)-1][1])
+            
+            
+            
+            for i in range(len(self.path)):
+                print("normal: (", self.path[i].x, ", ", self.path[i].y, "),  actual: (", self.path[i].x + self.translations[i][0], ", ", self.path[i].y + self.translations[i][1], ")")
+                
+             
 
             self.drive()
             
@@ -82,6 +149,7 @@ class Car:
         if (not self.local_goal is None) and ((self.pos[0] - self.local_goal[0]) ** 2 + (self.pos[1] - self.local_goal[1])**2)**.5 < .75:
             if len(self.path) > 0:
                 self.path.pop(0)
+                self.translations.pop(0)
             self.set_local_goal()
         if self.allowedToMove:
             if not self.local_goal is None:
@@ -89,7 +157,7 @@ class Car:
                     # print("driving", self.sending)
                     self.socket.send('d'.encode())
                     self.isMoving = True
-                goal_vector = sub(self.local_goal,self.pos)
+                goal_vector = sub(self.local_goal,self.pos) #local goal
                 car_angle = self.dir
                 goal_angle = 360-angle(goal_vector[0],goal_vector[1])
                 direction = dir(car_angle,goal_angle,0)
