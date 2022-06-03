@@ -1,8 +1,8 @@
 # Making Intelligent Traffic
 
 ## Overview
-![Project photo1]()
-![Project photo1]()
+![Project photo1](https://github.com/AnirudhhRamesh/Intelligent-Traffic-Backend/blob/readme/images/simulation_view.jpg?raw=true)
+![Project photo1](https://github.com/AnirudhhRamesh/Intelligent-Traffic-Backend/blob/readme/images/cars_simulation_view.jpg?raw=true)
 
 Making Intelligent Traffic is a project that we developed at EPFL for the course "Making Intelligent Things" (CS-358) taught by Professor Christoph Koch. 
 
@@ -112,11 +112,10 @@ There are many more resources so simply search up on Google or YouTube for these
 Regarding our designs, we tried going for a simpler body in order to save time with designing our parts and manufacturing our cars.
 
 After 2-3 iterations we were able to finalise our design to the following:
-**INSERT PHOTO OF THE FINAL DESIGN**
-![Final car design]()
+![Final car design](https://github.com/AnirudhhRamesh/Intelligent-Traffic-Backend/blob/readme/images/fusion360_view_1.png?raw=true)
 
 Below you can see the comparison with the initial car design we had. You can see that all the hard work we put into sketching out and designing the car beforehand paid off, we had an almost 40% smaller wheelbase and our wheels could turn fully without any obstructions.
-![Car designs comparison]()
+![Car designs comparison](https://github.com/AnirudhhRamesh/Intelligent-Traffic-Backend/blob/readme/images/3d%20car%20design%20comparison.jpeg?raw=true)
 
 The main components of the 3D design is split into a dual-body design, the base plate and the battery holder:
 - The base plate connected all the wheel axles, and also held the battery box and the servo. We improved our design to include a motor axle (to hold the motor gear more steadily) and also a screwhole to add a servo axle holder (to hold it firmly against the steering assembly).
@@ -168,13 +167,17 @@ There were two components we initially considered using:
 
 The final wiring was the following:
 
-**INSERT PHOTO OF THE WIRING**
-![wiring diagram]()
+![wiring diagram](https://github.com/AnirudhhRamesh/Intelligent-Traffic-Backend/blob/readme/images/mit%20traffic%20car%20wiring.png?raw=true)
 
 
 ### Soldering
 
-The only parts that need to be soldered are the two resistors for the bluetooth module and the wires of the battery box adapter. This is fairly straight forward by looking at your available cables and the wiring diagram above.
+The only parts that need to be soldered are the two resistors for the bluetooth module and the wires of the battery box adapter. This is fairly straight forward by looking at your available cables and the wiring diagram above. 
+
+Make sure you have received a proper training with soldering and have watch a couple of good soldering tutorials ([this](https://www.youtube.com/watch?v=6rmErwU5E-k&ab_channel=wermy) one is great!)
+
+This is what one of our finally wired cars looked like, this photo also shows the turn radius of the car. You can certainly do a better job with the cable management!
+![wired cars](https://github.com/AnirudhhRamesh/Intelligent-Traffic-Backend/blob/readme/images/wired_car_turn_radius.jpg?raw=true)
 
 Once all the soldering and wiring up has been done, you can move on to the software part.
 
