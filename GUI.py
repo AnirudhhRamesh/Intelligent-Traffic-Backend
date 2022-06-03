@@ -30,7 +30,7 @@ FPS = 30
 FramePerSec = pygame.time.Clock()
 margin = 1
 
-# DISPLAYSURF = pygame.display.set_mode((MAX_X, MAX_Y))
+DISPLAYSURF = pygame.display.set_mode((MAX_X, MAX_Y))
 
 #GUI description
 class GUI:
@@ -77,8 +77,8 @@ class GUI:
                     self.map.map[column][row].passenger = newPassenger
 
         #Draw the grid
-        for row in range(len(self.grid[0])):
-            for column in range(len(self.grid)):
+        for row in range(len(self.grid)):
+            for column in range(len(self.grid[0])):
                 if self.map.map[column][row].isRoad and not self.map.map[column][row].hasPassenger():
                     color = WHITE
                 else:

@@ -16,7 +16,7 @@ import GUI
 import threading
 map_filename = "map5.csv"
 car_list = [
-    (9,'00:21:11:01:FA:14', (255,0,0)),
+    #(9,'00:21:11:01:FA:14', (255,0,0)),
 (8, '00:21:11:01:FA:1C', (0,255,0))
 # (10, '00:21:09:01:1e:fa')
 #  '00:21:09:01:1e:fa'
@@ -27,11 +27,12 @@ def main():
     print("starting program...")
 
     #Parse the map
-    myMap = Map(map_filename, None)
-    # myMap.printMap()
-    camera = Camera([4, 18, 0,6], [9,8], myMap.max_y, myMap.max_x, myMap)
     cars = init_cars(car_list)
-    dm = DecisionMaker(cars, myMap,camera)
+
+    myMap = Map(map_filename, cars)
+    #myMap.printMap()
+    camera = Camera([4, 18, 0,6], [9,8], myMap.max_y, myMap.max_x, myMap)
+    #dm = DecisionMaker(cars, myMap,camera)
     #Wait for camera to initialize 
     print("searching for corners...")
     while not camera.tr.foundCorners():
@@ -55,17 +56,30 @@ def main():
 
 
     #initiate GUI
-    # gui = GUI.GUI(myMap)
-    # gui.launchGUI()
+    gui = GUI.GUI(myMap)
+    gui.launchGUI()
 
    
     #TODO Alexander
     try:
         while True:
-            # gui.update()
+            gui.update()
             camera.update() #get car positions from camera and update global map 
-            dm.update(camera)
+            #dm.update(camera)
             for car in cars:
+                car.position(camera.get_pos(car.id))
+                car.direction(camera.get_dir(car.id))
+                if not car.path is None:
+                    for cell in car.path:
+                        i = cell.x
+                        j = cell.y
+                        for passenger in car.passengers:
+                            if(cell == passenger.start):
+                               cv2.circle(camera.frame_in, (int(camera.tr.inverse(i,j)[0]),int(camera.tr.inverse(i,j)[1])),car.id,(0,0,255),1)
+                            elif(cell == passenger.goal):
+                                cv2.circle(camera.frame_in, (int(camera.tr.inverse(i,j)[0]),int(camera.tr.inverse(i,j)[1])),car.id,(255,255,0),1)
+                            else:       
+                                cv2.circle(camera.frame_in, (int(camera.tr.inverse(i,j)[0]),int(camera.tr.inverse(i,j)[1])),car.id,car.color,1)
                 car.drive() #find the next point in the path, and set the angle of the car to point there
             # draw
             if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -77,7 +91,7 @@ def main():
         print(e)
         print(tb)
     finally:
-        for i in range(10):
+        for i in range(40):
             for car in cars:
                 car.stopDrive()
 #Initialize the car connections

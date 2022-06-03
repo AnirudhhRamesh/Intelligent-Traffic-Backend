@@ -217,6 +217,7 @@ class Map:
         shortestPathLength = 10000
         shortestPathCar = Any
         shortestPath = []
+        newPath = []
 
         #TODO Alexander
         #for car in cars:
@@ -226,16 +227,22 @@ class Map:
         #                car2.stop()
 
         #Find the car with the shortest path to the next passenger
-        for (carId, car) in self.cars.items():
+        for car in self.cars:
             if not car.passengers:
-                newPath = self.shortestPath(self.getCell(car.pos[0], car.pos[1]), passenger.start)
+                newPath = self.shortestPath((car.get_pos()[0], car.get_pos()[1]), passenger.start.position())
+                newPath.extend(self.shortestPath(passenger.start.position(), passenger.goal.position()))
+                car.set_path(newPath)
+
                 shortestPathCar = car
             else:
-                newPath = self.shortestPath(car.passengers[-1].goal, passenger.start)
+                newPath = self.shortestPath(car.passengers[-1].goal.position(), passenger.start.position())
+                newPath.extend(self.shortestPath(passenger.start.position(), passenger.goal.position()))
+                car.append_to_path(newPath)
             if shortestPathLength > len(newPath):
                 shortestPath = newPath
                 shortestPathLength = len(newPath)
                 shortestPathCar = car
+            car.continueDrive()
         shortestPathCar.passengers.append(passenger)
         shortestPathCar.add_passenger_destination(passenger, shortestPath)
     
@@ -246,7 +253,7 @@ class Map:
 
     def checkIfPassengerOnCells(self):
         for car in self.cars:
-            currentCell: Cell = self.getCell(car.getCell(car.pos[0], car.pos[1]))
+            currentCell: Cell = self.getCell(car.getCell(car.get_pos()[0], car.get_pos()[1]))
             if(currentCell.hasPassenger() and currentCell.passenger in car.passengers):
                 self.currentPassenger = self.currentCell.passenger
                 self.currentCell.passenger.inCar = True
@@ -255,7 +262,7 @@ class Map:
 
     def CheckIfOnDestination(self):
         for car in self.cars:
-            if(self.getCell(car.pos[0], car.pos[1]) == self.currentPassenger.goal):
+            if(self.getCell(car.get_pos()[0], car.get_pos()[1]) == self.currentPassenger.goal):
                 car.currentPassenger = None
 
 #testMap = Map("map2.csv")

@@ -40,11 +40,14 @@ class Car:
   
     def set_path(self, path):
         self.path = path
+        print("PATH SET!")
         self.set_local_goal()
-        
+    
+    def append_to_path(self, new_path):
+        self.path.extend(new_path)
     
     def set_local_goal(self):
-
+        print("LOCAL GOAL SET")
         if not (self.path is None) and len(self.path) > 0:
             self.local_goal = (self.path[0].x, self.path[0].y)
             self.last_goal = (self.path[len(self.path)-1].x,self.path[len(self.path)-1].y)
@@ -78,7 +81,9 @@ class Car:
 
     def drive(self):
         self.sending = (self.sending + 1) % 5
-
+        if(not self.local_goal is None):
+            dist = ((self.pos[0] - self.local_goal[0]) ** 2 + (self.pos[1] - self.local_goal[1])**2)**.5 
+            print(dist)
         if (not self.local_goal is None) and ((self.pos[0] - self.local_goal[0]) ** 2 + (self.pos[1] - self.local_goal[1])**2)**.5 < .75:
             if len(self.path) > 0:
                 self.path.pop(0)
@@ -95,6 +100,7 @@ class Car:
                 direction = dir(car_angle,goal_angle,0)
                 if self.last_dir != direction or self.sending % 5 == 0:
                     self.last_dir = direction
+                    print("direction", direction)
                     self.socket.send(direction.encode())
         else:
             if self.isMoving:
