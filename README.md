@@ -52,7 +52,7 @@ For a better feel, you can also try working with lego and your arduino component
 
 Below are a few ideas/sketches that we had while designing our car and trying to minimize the wheel base:
 
-![car design sketches](https://drive.google.com/file/d/1t76Jm3UAOHL1nvBoODpjHrSnAMVJPoRY/view?usp=sharing)
+![car design sketches](https://github.com/AnirudhhRamesh/Intelligent-Traffic-Backend/blob/readme/images/mit_traffic_car_sketches.jpeg?raw=true)
 
 Given that we were trying to minimize the wheelbase in order to reduce the turning radius, we made several design choices:
 - We turned the servo backwards so that it would rest in the front of the car. This meant it would reduce the wheelbase by approximately 40%
@@ -78,7 +78,7 @@ In order to create the 3D lego models, we use [Studio 2.0 from bricklink](https:
 
 For us, it consisted of making the front and rear axles, which we then exported into two separate models. The front axle contained the steering assembly (wheels, axles, auxiliary parts and the gears for the servo). The rear axle modelled the lego differential and the wheels. You can see this below:
 
-![Lego car components model in Studio 2.0](https://drive.google.com/file/d/1087DV3oB-7dcU9oeHyWtFvS7Tsa8KQNE/view?usp=sharing)
+![Lego car components model in Studio 2.0](https://github.com/AnirudhhRamesh/Intelligent-Traffic-Backend/blob/readme/images/Studio%202.0%20Lego%20model.png?raw=true)
 
 Once you have made your design, you can then export it to use in Fusion 360. Unfortunately, we were unable to directly export it into Fusion 360, we must instead:
 - Within Studio 2.0, File>Export As> "Collada" (.dae)
