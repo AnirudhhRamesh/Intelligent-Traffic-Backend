@@ -67,7 +67,7 @@ For a better feel, you can also try working with lego and your arduino component
 
 Below are a few ideas/sketches that we had while designing our car and trying to minimize the wheel base:
 
-![car design sketches](https://github.com/AnirudhhRamesh/Intelligent-Traffic-Backend/blob/readme/images/mit_traffic_car_sketches.jpeg?raw=true)
+![car design sketches](https://github.com/AnirudhhRamesh/Intelligent-Traffic-Backend/blob/readme/images/mit_traffic_car_sketches.jpeg)
 
 Given that we were trying to minimize the wheelbase in order to reduce the turning radius, we made several design choices:
 - We turned the servo backwards so that it would rest in the front of the car. This meant it would reduce the wheelbase by approximately 40%
