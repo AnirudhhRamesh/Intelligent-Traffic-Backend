@@ -16,10 +16,10 @@ import GUI
 import threading
 map_filename = "map5.csv"#"map6.csv" #
 car_list = [
-   (9,'00:21:11:01:FA:14', (255,0,0)),
-# (8, '00:21:11:01:FA:1C', (0,255,0))
-# (10, '00:21:09:01:1e:fa')
-#  '00:21:09:01:1e:fa'
+    (9,'00:21:11:01:FA:14', (255,0,0)),
+    (8, '00:21:11:01:FA:1C', (0,255,0)),
+    (0, '00:21:11:02:00:0a', (0,0,255)),
+    (1, '00:21:11:02:02:92', (0,255,0))
 ]
 #cars = [(bluetooth_mac, socket, carid, car),()]
 
@@ -29,7 +29,7 @@ def main():
     #Parse the map
     myMap = Map(map_filename, None)
     # myMap.printMap()
-    camera = Camera([4, 18, 0,6], [9,8], myMap.max_y, myMap.max_x, myMap)
+    camera = Camera([4, 18, 0,6], [9,8,0,1], myMap.max_y, myMap.max_x, myMap)
     cars = init_cars(car_list)
     dm = DecisionMaker(cars, myMap,camera)
     #Wait for camera to initialize 

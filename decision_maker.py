@@ -50,7 +50,7 @@ class DecisionMaker:
             for cell in car.path:
                 i = cell.x
                 j = cell.y
-                cv2.circle(camera.frame_in, (int(camera.tr.inverse(i,j)[0]),int(camera.tr.inverse(i,j)[1])),car.id,car.color,1)
+                cv2.circle(camera.frame_in, (int(camera.tr.inverse(i,j)[0]),int(camera.tr.inverse(i,j)[1])),car.id + 3,car.color,1)
 
         # self.intersection(6.5,3.5,0)
         # self.intersection(3.5,6.5,1)
