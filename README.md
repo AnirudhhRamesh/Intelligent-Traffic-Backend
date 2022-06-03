@@ -1,6 +1,9 @@
 # Making Intelligent Traffic
 
 ## Overview
+![Project photo1]()
+![Project photo1]()
+
 Making Intelligent Traffic is a project that we developed at EPFL for the course "Making Intelligent Things" (CS-358) taught by Professor Christoph Koch. 
 
 Since this was the first year this course has been running, it was open exclusively to 2nd and 3rd year students in the IC bachelor's section. Thus, our team consists of 5 EPFL BSc Computer Science students: Alexander Müller, Anirudhh Ramesh, Damian Kopp, Louis Domart, Luca Engel.
@@ -18,22 +21,32 @@ You can find a 1 minute video demonstration of the path planning demo [here](htt
 This is a quick rundown on how to get a version of our project launched and running yourself. It includes useful learning resources and examples as well as instructions to launch the codebase.
 
 ## Table of contents
-- 3D design
-  - Sketches
-  - Bricklayer studio
-  - Fusion 360
-  - 3D Printing with Prusa
-- Building the cars
-  - Choosing the components
-  - Soldering
-- Software
-  - Libraries
-    - Bluetooth
-    - AprilTags
-    - OpenCV
-  - Launching the codebase
-    - Overview **DIAGRAM**
-    - Launching different demos
+- [Making Intelligent Traffic](#making-intelligent-traffic)
+  - [Overview](#overview)
+  - [Quick start guide for Traffic simulation project](#quick-start-guide-for-traffic-simulation-project)
+  - [Table of contents](#table-of-contents)
+  - [3D Design](#3d-design)
+    - [Sketches](#sketches)
+    - [Bricklayer studio](#bricklayer-studio)
+    - [Fusion 360](#fusion-360)
+    - [3D Printing with Prusa](#3d-printing-with-prusa)
+  - [Building the cars](#building-the-cars)
+    - [Choosing the components](#choosing-the-components)
+    - [Soldering](#soldering)
+  - [Arduino](#arduino)
+    - [Brush motor](#brush-motor)
+    - [Servo](#servo)
+    - [Bluetooth HC=05](#bluetooth-hc05)
+- [Bluetooth](#bluetooth)
+  - [Apriltags](#apriltags)
+    - [Installation](#installation)
+    - [Tag Detection](#tag-detection)
+    - [Camera distortion and Coordinates](#camera-distortion-and-coordinates)
+  - [Feedback Loop](#feedback-loop)
+    - [Overview](#overview-1)
+    - [Problem](#problem)
+    - [Algorithm](#algorithm)
+  - [Basic traffic controller](#basic-traffic-controller)
   
 ## 3D Design
 The first step in the project was designing the cars. To make a suitable car for our project, it took us two attempts;
@@ -100,8 +113,10 @@ Regarding our designs, we tried going for a simpler body in order to save time w
 
 After 2-3 iterations we were able to finalise our design to the following:
 **INSERT PHOTO OF THE FINAL DESIGN**
+![Final car design]()
 
-Here you can see the comparison with the inital car design we had. You can see that all the hard work we put into sketching out and designing the car beforehand paid off, we had an almost 40% smaller wheelbase and our wheels could turn fully without any obstructions.
+Below you can see the comparison with the initial car design we had. You can see that all the hard work we put into sketching out and designing the car beforehand paid off, we had an almost 40% smaller wheelbase and our wheels could turn fully without any obstructions.
+![Car designs comparison]()
 
 The main components of the 3D design is split into a dual-body design, the base plate and the battery holder:
 - The base plate connected all the wheel axles, and also held the battery box and the servo. We improved our design to include a motor axle (to hold the motor gear more steadily) and also a screwhole to add a servo axle holder (to hold it firmly against the steering assembly).
@@ -153,13 +168,13 @@ There were two components we initially considered using:
 
 The final wiring was the following:
 
-    **INSERT PHOTO OF THE WIRING**
+**INSERT PHOTO OF THE WIRING**
+![wiring diagram]()
+
 
 ### Soldering
 
-The only parts that need to be soldered are the two resistors for the bluetooth module and the wires of the battery box adapter. The following photo clearly shows the corresponding parts: 
-
-    **INSERT PHOTO OF THE SOLDERING**
+The only parts that need to be soldered are the two resistors for the bluetooth module and the wires of the battery box adapter. This is fairly straight forward by looking at your available cables and the wiring diagram above.
 
 Once all the soldering and wiring up has been done, you can move on to the software part.
 
@@ -226,7 +241,7 @@ Our exact turn mapping looks as follows:
 ```
 The turning angles were chosen after a lot of experimentation.
 
-### Bluetooth
+### Bluetooth HC=05
 To achieve the first task, we will use the SoftwareSerial library: ```#include <SoftwareSerial.h>```, which should come by default with the Arduino IDE. This will allow us to treat the HC-05 as a Serial port, just like writing to and reading from the Serial Monitor on the IDE.
 
 We can instantiate a new instance of SoftwareSerial by giving it two pins to read from (RX and TX of the HC-05, respectively): ```SoftwareSerial MyBlue(8,9);```. To read, we simply use the following code:
