@@ -16,8 +16,8 @@ import GUI
 import threading
 map_filename = "map5.csv"
 car_list = [
-    #(9,'00:21:11:01:FA:14', (255,0,0)),
-(8, '00:21:11:01:FA:1C', (0,255,0))
+    # (9,'00:21:11:01:FA:14', (255,0,0)),
+#(8, '00:21:11:01:FA:1C', (0,255,0))
 # (10, '00:21:09:01:1e:fa')
 #  '00:21:09:01:1e:fa'
 ]
@@ -31,7 +31,7 @@ def main():
 
     myMap = Map(map_filename, cars)
     #myMap.printMap()
-    camera = Camera([4, 18, 0,6], [9,8], myMap.max_y, myMap.max_x, myMap)
+    camera = Camera([4, 18, 0,6], [], myMap.max_y, myMap.max_x, myMap)
     #dm = DecisionMaker(cars, myMap,camera)
     #Wait for camera to initialize 
     print("searching for corners...")
@@ -65,6 +65,8 @@ def main():
         while True:
             gui.update()
             camera.update() #get car positions from camera and update global map 
+            myMap.CheckIfOnDestination()
+            myMap.checkIfPassengerOnCells()
             #dm.update(camera)
             for car in cars:
                 car.position(camera.get_pos(car.id))

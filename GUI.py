@@ -68,7 +68,6 @@ class GUI:
                 column = int(pos[0] // (self.cell_width+margin))
                 row = int(pos[1] // (self.cell_height+margin))
                 if self.map.map[column][row].isRoad and not self.map.map[column][row].hasPassenger(): 
-                    self.grid[column][row] = 1
                     finalCell = self.map.getCell(randint(0, len(self.map.map)-1), randint(0,len(self.map.map[0])-1))
                     while not finalCell.isRoad :
                         finalCell = self.map.getCell(randint(0, len(self.map.map)-1), randint(0,len(self.map.map[0])-1)) 
@@ -83,7 +82,7 @@ class GUI:
                     color = WHITE
                 else:
                     color = BLACK
-                if self.grid[column][row] == 1:
+                if self.map.map[column][row].isRoad and self.map.map[column][row].hasPassenger():
                     color = GREEN
                 pygame.draw.rect(DISPLAYSURF, 
                                  color, 

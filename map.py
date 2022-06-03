@@ -253,17 +253,18 @@ class Map:
 
     def checkIfPassengerOnCells(self):
         for car in self.cars:
-            currentCell: Cell = self.getCell(car.getCell(car.get_pos()[0], car.get_pos()[1]))
+            currentCell: Cell = self.getCell(car.get_pos()[0], car.get_pos()[1])
             if(currentCell.hasPassenger() and currentCell.passenger in car.passengers):
-                self.currentPassenger = self.currentCell.passenger
-                self.currentCell.passenger.inCar = True
-                self.currentCell.passenger = None
+                car.currentPassenger = currentCell.passenger
+                self.map[car.get_pos()[0]][car.get_pos()[1]].passenger.inCar = True
+                self.map[car.get_pos()[0]][car.get_pos()[1]].passenger = None
             
 
     def CheckIfOnDestination(self):
         for car in self.cars:
-            if(self.getCell(car.get_pos()[0], car.get_pos()[1]) == self.currentPassenger.goal):
-                car.currentPassenger = None
+            if car.currentPassenger is not None:
+                if(self.getCell(car.get_pos()[0], car.get_pos()[1]) == car.currentPassenger.goal):
+                    car.currentPassenger = None
 
 #testMap = Map("map2.csv")
 #testMap.shortestPath(testMap.map[10][4], testMap.map[12][0])
