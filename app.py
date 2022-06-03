@@ -14,7 +14,7 @@ import traceback
 import socket
 import GUI
 import threading
-map_filename = "map5.csv"
+map_filename = "map5.csv"#"map6.csv" #
 car_list = [
    (9,'00:21:11:01:FA:14', (255,0,0)),
 # (8, '00:21:11:01:FA:1C', (0,255,0))
