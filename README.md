@@ -21,13 +21,8 @@ This is a quick rundown on how to get a version of our project launched and runn
   - Fusion 360
   - 3D Printing with Prusa
 - Building the cars
-  - Connecting the components
-    - Soldering work
-    - Wiring
-  - Arduino
-    - Brush motor
-    - Servo connection
-    - Communicate over bluetooth
+  - Choosing the components
+  - Soldering
 - Software
   - Libraries
     - Bluetooth
@@ -129,3 +124,34 @@ You can then move around the components in order to minmize the support structur
 Then, once all your parts are printed (make sure you search online and get a proper formation on how to 3D print!) you can assemble your parts and start wiring and programming!
 
 
+## Building the cars
+
+### Choosing the components
+
+Since we already did an individual project with 3D printed cars, we tried to use as much as possible for our group project. It turned out quickly however that the only part we don't have to reconstruct was the steering montage.
+It was clear that we need a motor that has a proper gearbox so that any problems concerning basic driving can be avoided. Another problem we had with the individual project cars were the batteries. The single 9V batteries barely lasted and did not produce enough current, so we opted for 6 AA batteries instead.
+The components we finally used are the following:
+
+- Battery box that has space for 6 AA batteries resulting in 9V (generate enough current for a much longer timespan than a single 9V battery)
+- AA batteries
+- L298N motor driver: Because this motor driver has a dual H-bridge, the cars would also be able to drive backwards. In general, this motor driver is really practical because of the very flexible voltage input of up to 12V.
+- Arduino Uno: Thanks to big variety of different ports we could reduce the amount to solder to a minimum
+- HC-05 bluetooth module: In order to have the cars communicate with the server and get new commands we decided to use bluetooth. The advantage of bluetooth was that the module was small and it was relatively easy to set up compared to other communication possibilities.
+Specifically, the module has a transmitter pin and a receiver pin besides the VCC and GND pins.
+- TowerPro Micro Servo 9G SG90: A small and simple-to-use servo motor we already used for the above mentioned individual project.
+- Yellow gearbox DC motor: With its built-in holes and mounting options it saved us from major gear problems.
+
+There were two components we initially considered using:
+
+- TCRT-5000 infrared sensors: They could have been used to locate more precisely where a car is and make appropriate path corrections. But as the system already located the cars precisely enough we did not need them in the end.
+- Arduino Mini DC Motor Driver: The L298N Motor Driver was more familiar to us but this motor driver would have been possible too. They can both control up to two DC motors in both directions and with speed control.
+
+The final wiring was the following:
+
+    **INSERT PHOTO OF THE WIRING**
+
+### Soldering
+
+The only parts that need to be soldered are the two resistors for the bluetooth module and the wires of the battery box adapter. The following photo clearly shows the corresponding parts: 
+
+    **INSERT PHOTO OF THE SOLDERING**
