@@ -47,6 +47,8 @@ This is a quick rundown on how to get a version of our project launched and runn
     - [Problem](#problem)
     - [Algorithm](#algorithm)
   - [Basic traffic controller](#basic-traffic-controller)
+  - [Software design](#software-design)
+    - [Overview](#overview-2)
   
 ## 3D Design
 The first step in the project was designing the cars. To make a suitable car for our project, it took us two attempts;
@@ -100,6 +102,9 @@ Once you have made your design, you can then export it to use in Fusion 360. Unf
   - "Edit in place" your design, then scale down your lego model to a factor of exactly 0.04
   - Rotate the lego car model as needed
 
+You can find the Studio file we used [here](https://github.com/AnirudhhRamesh/Intelligent-Traffic-Backend/blob/readme/useful_files/mit_traffic_lego_components.io)
+
+
 ### Fusion 360
 Unlike Studio, Fusion 360 has a very steep learning curve and getting started will be tough (and even with experience it is a very time-consuming process). This is why we really emphasise the importance of sketching out and planning your designs on paper first, you will save days if not weeks!
 
@@ -128,6 +133,7 @@ With more time, it would certainly be interesting to test out a cantilever "clip
 
 You could also try make a sleek car body, to cover the entire car chassis and components making the design look much more appealing.
 
+You can find our Fusion360 file [here](https://github.com/AnirudhhRamesh/Intelligent-Traffic-Backend/blob/readme/useful_files/MIT%20Traffic%20Final%20Car%20Design.f3z)
 
 ### 3D Printing with Prusa
 Once you have all your components finalised in Fusion 360, you can File>3D Print then export your components as .stl files.
@@ -354,3 +360,15 @@ First of all, we will probably never see the angle equaling zero, even if we cas
 This leads to a different problem: we might not be able to make a sharp enough turn to ever reach the target! If the target is directly behind us, say, then we might just end up circling forever, unable to reach it. This is why we have so many turning commands: we need to make super sharp turns when we are facing far away from the target, and as we close the angle between us and the goal, we slowly taper off the amount we turn. This turns out to work quite well.
 ## Basic traffic controller
 Our basic traffic controller is used to simulate regular traffic interacting at five intersections. Each car is assigned a destination at random and begins driving there. When two cars come to an intersection, they are added to a waiting queue to be allowed through the intersection. Although we could not simulate it with our physical cars, our virtual simulation also allowed us to make these cars “autonomous” cars who could tell their intended paths to one another, allowing multiple cars through the same intersection when their paths don’t cross.
+
+## Software design
+We will give a very quick rundown of the structure of our codebase. Our simulation code is all written in Python, so we highly recommend you watch tutorials on python and python object-oriented programming. Also make sure that you are familiar with object-oriented concepts and advanced elements such as inheritance.
+
+Note: Due to problems with python, it was too tedious for us to implement packages (we initially had them but had to remove the packages since we were unable to properly import the classes from the files).
+
+### Overview
+
+Below you can find the UML diagram that we designed and used as a reference to coding our classes.
+![UML diagram of code body](https://github.com/AnirudhhRamesh/Intelligent-Traffic-Backend/blob/readme/images/mit_traffic_codebase_uml.jpeg)
+
+We recommend that you try reading through our codebase to understand more how each class interacts with each other.
