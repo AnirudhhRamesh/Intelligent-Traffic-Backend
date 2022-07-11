@@ -18,12 +18,15 @@ Please note that due to time constraints and unforeseen challenges, there have b
 You can find below a couple of video demonstrations of our code:
 
 - Four vehicle path-planning demo: Four vehicles have randomly assigned waypoints and navigate to them. The camera locates them and tells them when they can move or not (to avoid collisions at intersections) as well as to provide the feedback loop to ensure cars stay on track.
+
 https://user-images.githubusercontent.com/42436661/178288099-690d4193-3957-4b85-b3c5-8686a3173c4d.mp4
 
 - Follow the leader demo: One vehicle is manually controlled using a bluetooth controller, whereas the other vehicle autonomously tries to follow them, by setting a waypoint to that vehicle.
+
 https://user-images.githubusercontent.com/42436661/178288590-caf833e8-2eaa-4cff-99bd-9ed16212f138.mp4
 
 - Passenger pick-up demo: Using the GUI, a user can select a map cell which will spawn a passenger at that cell and generate a random passenger goal. The car will then create a path which picks up the passenger and drops him off at the desired location.
+
 https://user-images.githubusercontent.com/42436661/178289377-d21953c0-eaa8-459f-8ace-d01f3fcd5f21.mp4
 
 You can find a 1 minute video demonstration of the path planning demo [here](https://drive.google.com/file/d/1EYt720cjqWnevPligDJrOszAY6IA7B7U/view?usp=sharing). Please note the video only demonstrates the path planning mode, it does not demonstrate the GUI mode nor the "Follow the Leader" mode.
