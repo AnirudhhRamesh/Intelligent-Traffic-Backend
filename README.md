@@ -15,7 +15,15 @@ Please note that due to time constraints and unforeseen challenges, there have b
 - A simulation where, when clicking on a cell on our GUI, will create a "passenger" and designate a car (using the algorithm we have described further below) to include it to their planned trajectory in order to "pick-up" this passenger.
 - A multi-car path planning simulation, where cars attempt to avoid collisions at intersections by "negotiating" with each other. 
 
-You can find a 1 minute video demonstration of the path planning demo [here](https://drive.google.com/file/d/1EYt720cjqWnevPligDJrOszAY6IA7B7U/view?usp=sharing). Please not the video only demonstrates the path planning mode, it does not demonstrate the GUI mode nor the "Follow the Leader" mode.
+You can find below a couple of video demonstrations of our code:
+
+https://user-images.githubusercontent.com/42436661/178288099-690d4193-3957-4b85-b3c5-8686a3173c4d.mp4
+
+https://user-images.githubusercontent.com/42436661/178288590-caf833e8-2eaa-4cff-99bd-9ed16212f138.mp4
+
+https://user-images.githubusercontent.com/42436661/178289377-d21953c0-eaa8-459f-8ace-d01f3fcd5f21.mp4
+
+You can find a 1 minute video demonstration of the path planning demo [here](https://drive.google.com/file/d/1EYt720cjqWnevPligDJrOszAY6IA7B7U/view?usp=sharing). Please note the video only demonstrates the path planning mode, it does not demonstrate the GUI mode nor the "Follow the Leader" mode.
 
 ## Quick start guide for Traffic simulation project
 This is a quick rundown on how to get a version of our project launched and running yourself. It includes useful learning resources and examples as well as instructions to launch the codebase.
