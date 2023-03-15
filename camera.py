@@ -10,7 +10,8 @@ class Camera:
         self.map = map
         self.myMap = self.map.map
         
-        self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        self.cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+        print("-------------------")
         self.corner_ids = corner_ids
         self.car_ids = car_ids
         self.pos = {}

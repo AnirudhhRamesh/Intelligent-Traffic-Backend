@@ -60,7 +60,8 @@ class FileVideoStream:
     def startStream(self):
         print("start!\n")
 
-        cap = cv2.VideoCapture(0, cv2.CAP_DSHOW) 
+        cap = cv2.VideoCapture(1, cv2.CAP_DSHOW) 
+        print("*************************************88")
         # cap =  videostream.VideoStream(src='http://192.168.137.79:8080/video', framerate=24, resolution=(1920,1260)).start()
         Time.sleep(1)
         at_detector = Detector(families='tag36h11',

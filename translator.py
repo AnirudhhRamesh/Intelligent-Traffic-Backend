@@ -35,14 +35,14 @@ class Translator:
     def translate(self,x,y,tags=None):
         self.setCoords(tags)
         if self.foundCorners():
-            nx = (x - self.id1Coords[0]) / abs((self.id2Coords[0]-40) - self.id1Coords[0]) * self.x - 1
+            nx = (x - self.id1Coords[0]) / abs((self.id2Coords[0]-20) - self.id1Coords[0]) * self.x - 1
             ny = (y - self.id1Coords[1]) / (-1*abs(self.id4Coords[1] - self.id1Coords[1])) * self.y
             return (nx, ny)
         return None
     def inverse(self,x,y,tags=None):
         self.setCoords(tags)
         if self.foundCorners():
-            px = (x+1) / self.x * abs((self.id2Coords[0]-40) - self.id1Coords[0]) + self.id1Coords[0]
+            px = (x+1) / self.x * abs((self.id2Coords[0]-20) - self.id1Coords[0]) + self.id1Coords[0]
             py = y / self.y * -abs(self.id4Coords[1] - self.id1Coords[1]) + self.id1Coords[1]
             return(px,py)
         return None

@@ -18,7 +18,7 @@ map_filename = "map5.csv"
 car_list = [
     (9,'00:21:11:01:FA:14', (255,0,0)),
 (8, '00:21:11:01:FA:1C', (0,255,0))
-# (10, '00:21:09:01:1e:fa')
+# (2, '00:21:11:02:00:0A', (0,0,255))
 #  '00:21:09:01:1e:fa'
 ]
 #cars = [(bluetooth_mac, socket, carid, car),()]
@@ -29,13 +29,14 @@ def main():
     #Parse the map
     myMap = Map(map_filename, None)
     # myMap.printMap()
-    camera = Camera([4, 18, 0,6], [9,8], myMap.max_y, myMap.max_x, myMap)
+    camera = Camera([4, 18, 0,6], [e[0] for e in car_list], myMap.max_y, myMap.max_x, myMap)
     cars = init_cars(car_list)
     dm = DecisionMaker(cars, myMap,camera)
     #Wait for camera to initialize 
     print("searching for corners...")
     while not camera.tr.foundCorners():
         camera.update()
+        print("searching...")
     print("found corners!")
     print("searching for cars...")
     #TODO: wait for cars positions to be found 
